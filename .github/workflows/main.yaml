@@ -1,18 +1,36 @@
-name: Zola on GitHub Pages - Branch Deployment
+name: Zola on GitHub Pages
 
-on: 
- push:
-  branches:
-   - web-deployment
+on:
+  push:
+    branches:
+      - web-deployment
+  pull_request:
 
 jobs:
   build:
-    name: Publish site
     runs-on: ubuntu-latest
+    if: github.ref != 'refs/heads/main'
     steps:
-    - name: Checkout to web-deployment
-      uses: actions/checkout@v4
-    - name: Build and deploy
-      uses: shalzz/zola-deploy-action@v0.22.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Build only
+        uses: shalzz/zola-deploy-action@v0.22.1
+        env:
+          BUILD_DIR: public
+          BUILD_ONLY: true
+          BUILD_FLAGS: --drafts
+          # A GitHub token is not necessary when BUILD_ONLY is true
+          # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+      - name: Build and deploy
+        uses: shalzz/zola-deploy-action@v0.22.1
+        env:
+          BUILD_DIR: public
+          PAGES_BRANCH: web-deployment
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
