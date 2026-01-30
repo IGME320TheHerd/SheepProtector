@@ -1,0 +1,21 @@
+name: Zola on GitHub Pages - Branch Deployment
+
+on: 
+ push:
+  branches:
+   - web-deployment
+
+jobs:
+  build:
+    name: Publish site
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout to web-deployment
+      uses: actions/checkout@v4
+    - name: Build and deploy
+      uses: shalzz/zola-deploy-action@v0.22.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BUILD_THEMES: true
+        PAGES_BRANCH: web-deployment/public
+        BUILD_DIR: devblog
