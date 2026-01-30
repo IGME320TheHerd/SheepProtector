@@ -12,10 +12,14 @@ jobs:
     steps:
     - name: Checkout to web-deployment
       uses: actions/checkout@v4
+      working-directory: ${{ BUILD_DIR }}
+
     - name: Build and deploy
       uses: shalzz/zola-deploy-action@v0.22.0
+      working-directory: ${{ BUILD_DIR }}
+
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BUILD_THEMES: true
         PAGES_BRANCH: web-deployment/public
-        BUILD_DIR: github/workspace/devblog
+        BUILD_DIR: devblog
