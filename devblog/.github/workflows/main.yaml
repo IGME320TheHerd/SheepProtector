@@ -18,4 +18,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         BUILD_THEMES: true
         PAGES_BRANCH: web-deployment/public
-        BUILD_DIR: devblog
+        BUILD_DIR: github/workspace/devblog
