@@ -30,7 +30,7 @@ collections:
 
 # Build settings
 theme: jekyll-whiteglass
-remote-theme: yous/whiteglass
+# remote-theme: yous/whiteglass
 plugins:
   - jekyll-archives
   - jekyll-paginate
