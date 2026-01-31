@@ -29,13 +29,13 @@ collections:
     output: true
 
 # Build settings
-#theme: jekyll-whiteglass
-remote-theme: yous/whiteglass
+theme: minimal@v0.2.0
+#remote-theme: yous/whiteglass
 plugins:
+  - jekyll-remote-theme
   - jekyll-archives
   - jekyll-paginate
   - jekyll-sitemap
-  - jekyll-remote-theme
 
 permalink: /:year/:month/:day/:title/
 paginate_path: /posts/:num/
