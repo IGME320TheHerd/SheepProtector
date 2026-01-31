@@ -1,0 +1,7 @@
+{% for author in site.members %}
+    <div class="member-block">
+      <h3>{{ author.full-name }} <span class="position">{{ author.position }}</span></h3>
+      <p>{{ author.content | markdownify }}</p>
+      <p> <a href="mailto:{{ author.email }}">Email</a> | <a href="{{ author.github }}">github</a> | <a href="{{ author.other }}">portfolio</a> </p>
+    </div>
+{% endfor %}

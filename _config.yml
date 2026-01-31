@@ -20,11 +20,13 @@
 
 title: Sheep Protector
 description: >- # this means to ignore newlines until "baseurl:"
-  Development blog and archive for IGME 320
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "https://igme320theherd.github.io/SheepProtector" # the base hostname & protocol for your site, e.g. http://example.com
-twitter_username: jekyllrb
-github_username:  jekyll
+  Development blog and archive for IGME 320 - Game Design and Development II at Rochester Institute of Technology
+url: "https://igme320theherd.github.io/SheepProtector/" # the base hostname & protocol for your site, e.g. http://example.com
+
+# Collection settings
+collections:
+  members:
+    output: true
 
 # Build settings
 theme: jekyll-whiteglass
