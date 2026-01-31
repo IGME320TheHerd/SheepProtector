@@ -21,7 +21,7 @@
 title: Sheep Protector
 description: >- # this means to ignore newlines until "baseurl:"
   Development blog and archive for IGME 320 - Game Design and Development II at Rochester Institute of Technology
-baseurl: ""
+baseurl: "/SheepProtector"
 url: "https://igme320theherd.github.io/SheepProtector/" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Collection settings
