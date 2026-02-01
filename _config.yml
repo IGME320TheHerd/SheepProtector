@@ -21,7 +21,7 @@
 title: Sheep Protector
 description: >- # this means to ignore newlines until "baseurl:"
   Development blog and archive for IGME 320 - Game Design and Development II at Rochester Institute of Technology
-baseurl: "/SheepProtector"
+#baseurl: "/SheepProtector"
 url: "https://igme320theherd.github.io/SheepProtector/" # the base hostname & protocol for your site, e.g. http://example.com
 
 # Collection settings
@@ -30,13 +30,16 @@ collections:
     output: true
 
 # Build settings
-#remote_theme: pages-themes/minimal@v0.2.0
-remote_theme: yous/whiteglass@v1.11.7
+remote_theme: zivong/jekyll-theme-hydure
+#remote_theme: poole/hyde@v2.1.0
+#remote_theme: yous/whiteglass@v1.11.7
 plugins:
   - jekyll-remote-theme
   - jekyll-archives
   - jekyll-paginate
   - jekyll-sitemap
+
+cover: https://www.transparenttextures.com/patterns/kuji.png
 
 permalink: /:year/:month/:day/:title/
 paginate_path: /posts/:num/
