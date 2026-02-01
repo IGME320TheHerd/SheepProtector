@@ -1,7 +1,14 @@
-{% for author in site.members %}
+{% for author in site.data.members %}
     <div class="member-block">
-      <h3>{{ author.full-name }} <span class="position">{{ author.position }}</span></h3>
-      <p>{{ author.content | markdownify }}</p>
-      <p> <a href="mailto:{{ author.email }}">Email</a> | <a href="{{ author.github }}">github</a> | <a href="{{ author.other }}">portfolio</a> </p>
+      <h3>{{ author.name }} <span class="position">{{ author.position }}</span></h3>
+      {% if author.content %}
+        <p>{{ author.content | markdownify }}</p>
+      {% endif %}
+      
+      <p class="member-links"> <a href="mailto:{{ author.email }}">Email</a> | <a href="https://github.com/{{ author.github }}">GitHub</a> 
+        {% if author.other %}
+        | <a href="{{ author.other.link }}">{{ author.other.title }}</a> 
+        {% endif %}
+      </p>
     </div>
 {% endfor %}

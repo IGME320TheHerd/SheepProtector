@@ -60,10 +60,20 @@ a.brand-title{
     }
 }
 
-.member-block span.position{
-    color: var(--link-color);
-    padding-left:0.5em;
-    font-size:0.85em;
+.member-block {
+    h3{
+        margin-bottom:0.125em
+    }
+    
+    span.position{
+        color: var(--link-color);
+        padding-left:0.5em;
+        font-size:0.85em;
+    }
+
+    p{
+        margin: 0;
+    }
 }
 
 header nav .pure-menu-list{

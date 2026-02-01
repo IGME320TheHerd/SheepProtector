@@ -1,12 +1,14 @@
 # Editing the Dev Blog
-This is a short tutorial on how to add blog posts to the website without cloning/pulling from the gh-pages branch and possibly messing things up. Everything important can be handled within the branch directory itself without having to pull and push new files.
+This is a short tutorial on how to add blog posts to the website and editing content without cloning/pulling from the gh-pages branch and possibly messing things up. Everything important can be handled within the branch directory itself without having to pull and push new files.
 
 All blog posts are written in Markdown and are processed into HTML through the Jekyll templating engine. Please do not try to hardcode & hardlink an HTML page into the blog; **the website will probably get messed up.**
-### Making The File
- Make your way over to the **gh-pages** branch in the repository.
-Good news; if you're seeing this readme, you're already there! Go to the **_posts** folder and select **create new file**.
+## Editing Member Information
+Go to the **_data** folder and open the **members.yml** file. Change information as desired. Pretty simple
 
-**Important:** Naming conventions for post files are very specific, and I don't want to risk broken links as the blog builds & redeploys. When creating a new post, follow this convention: ` YYYY-MM-DD-file-name.md `
+## Making a Blog Post
+Go to the **_posts** folder and select **create new file**.
+
+**Important:** Naming conventions for post files are very specific, and I don't want to risk broken links as the blog builds & redeploys. When creating a new post, follow this convention: ` YYYY-MM-DD-filename.md `
 
 The file **must** have a date in YYYY-MM-DD format preceding any other information, and it must also be a Markdown (md) file.
 
@@ -62,11 +64,27 @@ category:   category-name
 author:     John Doe
 ---
 
-I am the content of this blog post and will render as such!
+I am the content of this blog post and will render as regular HTML! What you see is what you'll get!
 # Big heading
 ## Less big heading
 ### You get the point
 ```
-#### Images
-Adding in images is slightly more complicated. 
-WIP
+#### Images and Other Files
+First, go to the **assets** folder. This is where any static files (files that do not get processed through Jekyll on build) go to be stored and referenced by other files. There are three subfolders, /css/, /files/, and /images/. Just concern yourself with /files/ and /images/ for now. 
+
+Upload any images in the images folder and any non-image files (PDFs, etc.) into the files folder. Their relative path should be something like `/assets/folder/file.ex`. This is the link you'd use to insert media into a blog post.
+
+Images in Markdown are formatted like this:
+
+```md
+![Image Alt Text](/assets/folder/file.jpg)
+```
+
+and links are formatted like this:
+```md
+[Link Text](/assets/folder/file.pdf)
+```
+
+and, uh, yeah. That's pretty much it. For more in-depth information, consult the [Jekyll Posts Docs](https://jekyllrb.com/docs/posts/). Happy posting!
+
+- Nao

@@ -8,4 +8,6 @@
 - title: Archive
   url: /archive/
 - title: View Tags
-  url: /archive/tags/
+  url: /tags/
+- title: View Categories
+  url: /categories/

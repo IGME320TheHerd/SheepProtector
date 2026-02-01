@@ -1,0 +1,58 @@
+# ===== MEMBER LIST =====
+# ==== GUIDE TO FIELDS
+# NAME: your full name
+# POSITION: your position on the team
+# EMAIL: preferred email
+# GITHUB: your GitHub username
+#
+# ==== OPTIONAL ====
+# CONTENT: a short introductory blurb. This will not render if left blank.
+# OTHER: any other link you'd like to add to the list (portfolio, social media, etc.). This will not render if left blank.
+#   OTHER.TITLE: the name of the linked service
+#   OTHER.LINK : the actual link to the service
+
+- name: Nao Belgrave
+  position: Designer, UX/UI, Webmaster
+  content: Hey! I'm Nao, one of the designers on **Sheep Protector**. I like reading, writing, and leaving short games unfinished.
+  email: nob6010@rit.edu
+  github: sacanthias
+  other: 
+    title: Portfolio
+    link: https://sacanthias.github.io/
+
+- name: Milo Qureshi
+  position: 
+  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  email: hhq8650@rit.edu
+  github: milosneptune
+  other:
+    title: Placeholder
+    link: 
+
+- name: Cameron Wilson
+  position: 
+  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  email: caw2217@rit.edu
+  github: dontgtg123
+  other:
+    title: Placeholder
+    link: 
+
+- name: Eoin Stansfield
+  position:
+  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  email: ejs2477@rit.edu
+  github: Sudszi
+  other:
+    title: Placeholder
+    link: 
+
+- name: Logan Brown
+  position:
+  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  email: ltb9433@rit.edu
+  github: Logan-Brown121
+  other:
+    title: Placeholder
+    link: 
+
