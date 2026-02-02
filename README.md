@@ -50,6 +50,9 @@ The same convention exists for categories.
 For the sake of brevity, I'd like to limit categories to maybe three or four: "design", "development", and "nondev", and whatever might arise when we need it. This is due to how Jekyll processes categories: they're all subfolders of the greater archive and I'd like to avoid having ten folders of arbitrary classifications.
 
 Fortunately, tags do not suffer this issue and may be used freely. Make as many tags as you want! Users can search through the blog by either tag or category.
+
+Alternatively, if you don't want to post the blog entry you have just yet, you can place the file in the **_drafts** folder so Jekyll does not render the blog post as a page on build.
+
 ### Adding Content
 #### Text
 Good news: adding text into Markdown files is supremely uncomplicated. You can type as normal anywhere below the front matter, and this will be rendered as the blog content. You do not need to use HTML tags or attributes; everything from this point on is in pure Markdown.
@@ -87,4 +90,4 @@ and links are formatted like this:
 
 and, uh, yeah. That's pretty much it. For more in-depth information, consult the [Jekyll Posts Docs](https://jekyllrb.com/docs/posts/). Happy posting!
 
-- Nao
+-Nao
