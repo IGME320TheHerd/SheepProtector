@@ -48,11 +48,11 @@
     link: 
 
 - name: Logan Brown
-  position:
-  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  position: Programmer
+  content: Hello! I am Logan, one of the programmers for Sheep Protector. I like cats (and currently have 2), being with my family, and playing games.
   email: ltb9433@rit.edu
   github: Logan-Brown121
   other:
-    title: Placeholder
-    link: 
+    title: Portfolio
+    link: https://people.rit.edu/ltb9433/portfolio/
 
