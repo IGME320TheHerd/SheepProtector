@@ -11,18 +11,16 @@
     --code-font: 'Courier New', Courier, monospace;
     --border-color: rgb(101, 90, 61) !important;
     --link-color: #3a7992 !important;
+    --body-bg: #ece5da !important;
+}
+
+@media(prefers-color-scheme:dark){
+    :root{
+        --body-bg: #343434 !important;
+    }
 }
 
 @import "hydure/main";
-
-body{
-    background-color: #ece5da;
-    color:black!important;
-}
-
-.posts .post-title a{
-    color: black !important;
-}
 
 .sidebar{
     background-color: rgb(101, 90, 61);
