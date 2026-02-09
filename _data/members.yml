@@ -39,12 +39,12 @@
     link: 
 
 - name: Eoin Stansfield
-  position:
-  content: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sed risus sit amet arcu maximus sodales.
+  position: Programmer
+  content: Hello! I'm Eoin, a programmer for **Sheep Protector**. I enjoy sports, cooking, and nature. 
   email: ejs2477@rit.edu
   github: Sudszi
   other:
-    title: Placeholder
+    title: 
     link: 
 
 - name: Logan Brown
