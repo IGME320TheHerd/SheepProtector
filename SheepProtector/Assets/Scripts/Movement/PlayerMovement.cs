@@ -31,6 +31,6 @@ public class movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.velocity = new Vector3(moveDir.x * moveSpeed,rb.velocity.y, moveDir.z * moveSpeed); // apply movement to rigid body
+        rb.linearVelocity = new Vector3(moveDir.x * moveSpeed,rb.linearVelocity.y, moveDir.z * moveSpeed); // apply movement to rigid body
     }
 }
