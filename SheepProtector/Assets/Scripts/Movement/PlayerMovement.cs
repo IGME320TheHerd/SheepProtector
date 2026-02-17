@@ -38,9 +38,10 @@ public class movement : MonoBehaviour
     {
         rb.linearVelocity = new Vector3(movementDirection.x * moveSpeed, rb.linearVelocity.y, movementDirection.z * moveSpeed); // set physics velocity
         
-        if (movementDirection != Vector3.zero) // check for player movement
-        {
-            transform.forward = Vector3.Slerp(transform.forward, movementDirection, Time.deltaTime * 10f); // rotates playe to face direction they are moving
-        }
+        // With the billboarding script, we shouldn't need to rotate player to their movement
+        //if (movementDirection != Vector3.zero) // check for player movement
+        //{
+        //    transform.forward = Vector3.Slerp(transform.forward, movementDirection, Time.deltaTime * 10f); // rotates playe to face direction they are moving
+        //}
     }
 }
