@@ -5,32 +5,42 @@ using UnityEngine;
 public class movement : MonoBehaviour
 {
     public float moveSpeed = 10f; // movement speed
+    public Transform camTransform; // reference to cameras positon
 
-    private Rigidbody rb; // physics component reference
+    private Rigidbody rb; // reference for player 
+    private Vector3 movementDirection; // reference to store movement direction
 
-    private Vector3 moveDir; // reference to movement direction
-
-    // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>(); // link rigid body component
+        rb = GetComponent<Rigidbody>(); // attaches rigid body
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // get input
-        float h = Input.GetAxisRaw("Horizontal"); 
+        // uses WASD for movement
+        float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
 
-        Vector3 forward = new Vector3(1, 0, 1).normalized; //forward is up right diagnol
-        Vector3 right = new Vector3(1, 0, -1).normalized; // right is down right diagnol
+        Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
+        Vector3 right = camTransform.right; // right direction from camera
 
-       moveDir = (forward * v) + (right * h); // combines vectors for w s for 'forward' and a d for 'right
+        forward.y = 0; // sets vertivcal direction so players doesnt fly
+        right.y = 0; // sets vert dir to keep movement on x and z
+        
+        // normalize movement to keep constant
+        forward.Normalize(); 
+        right.Normalize();
+
+        movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
     }
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(moveDir.x * moveSpeed,rb.linearVelocity.y, moveDir.z * moveSpeed); // apply movement to rigid body
+        rb.linearVelocity = new Vector3(movementDirection.x * moveSpeed, rb.linearVelocity.y, movementDirection.z * moveSpeed); // set physics velocity
+        
+        if (movementDirection != Vector3.zero) // check for player movement
+        {
+            transform.forward = Vector3.Slerp(transform.forward, movementDirection, Time.deltaTime * 10f); // rotates playe to face direction they are moving
+        }
     }
 }
