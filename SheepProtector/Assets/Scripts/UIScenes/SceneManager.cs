@@ -17,11 +17,11 @@ public class SceneManager : MonoBehaviour
     // list of screens to reference later
     [SerializeField] private List<GameObject> screens;
 
-    // ScreenState enum checker +
+    // GameState enum checker +
     // Property for the current screen state that may be referenced by other scripts
-    private ScreenState screenState;
+    private GameState screenState;
 
-    public ScreenState ScreenState
+    public GameState GameState
     {
         get { return screenState; }
     }
@@ -47,7 +47,7 @@ public class SceneManager : MonoBehaviour
     private void Start()
     {
         // screenState is set to start by default
-        screenState = ScreenState.Start;
+        screenState = GameState.MainMenu;
 
         // Fills the scenes list with each panel "screen"
         // Each panel is the direct child of the Canvas element
@@ -80,7 +80,7 @@ public class SceneManager : MonoBehaviour
     public void PauseToggle()
     {
         // checks the current screen state
-        if(screenState != ScreenState.Paused)
+        if(screenState != GameState.Paused)
         {
             // timeScale = 0 essentially pauses in-game time and prevents the player from moving
             Time.timeScale = 0;
@@ -90,7 +90,7 @@ public class SceneManager : MonoBehaviour
         {
             Time.timeScale = 1;
             SwitchScreen("Playing");
-            screenState = ScreenState.Playing;
+            screenState = GameState.Playing;
         }
     }
 
@@ -132,13 +132,13 @@ public class SceneManager : MonoBehaviour
         // this is really messy, but it basically checks the string passed through and changes the screen state accordingly
         screenState = screenName switch
         {
-            "StartScreen" => ScreenState.Playing,
-            "MainMenu" => ScreenState.Main,
-            "PauseMenu" => ScreenState.Paused,
-            "SettingsMenu" => ScreenState.Paused,
-            "EndScreen" => ScreenState.End,
+            "StartScreen" => GameState.Playing,
+            "MainMenu" => GameState.MainMenu,
+            "PauseMenu" => GameState.Paused,
+            "SettingsMenu" => GameState.Paused,
+            "EndScreen" => GameState.GameOver,
             // default case is used to set everything back to the playing state
-            _ => ScreenState.Playing,
+            _ => GameState.Playing,
         };
     }
 }
