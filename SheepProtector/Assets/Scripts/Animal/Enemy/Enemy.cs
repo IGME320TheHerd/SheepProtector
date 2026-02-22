@@ -9,43 +9,59 @@ public class Enemy : Animal
     // The target this enemy is currently chasing, whether that be the sheep or sheepdog.
     private GameObject chaseTarget;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected override void Start()
+    /// <summary>
+    /// Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// </summary>
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    protected override void Update()
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    private void FixedUpdate()
     {
         
     }
 
-    // How the enemy should react when the dog barks near them.
+    /// <summary>
+    /// How the enemy should react when the dog barks near them.
+    /// </summary>
+    /// <param name="callBackContext"></param>
     protected override void BarkReaction(ContextCallback callBackContext)
     {
         
     }
 
-    // Unused for enemies, as they are immediately destroyed when they die.
+    /// <summary>
+    /// Unused for enemies, as they are immediately destroyed when they die.
+    /// </summary>
     protected override void Die()
     {
         // Unused for enemies, as they are immediately destroyed when they die.
     }
 
-    // How the enemy should move.
+    /// <summary>
+    /// How the enemy should move.
+    /// </summary>
     protected override void Movement()
     {
         
     }
 
-    // Have the enemy start chasing a target.
+    /// <summary>
+    /// Have the enemy start chasing a target.
+    /// </summary>
+    /// <param name="target"> What this enemy should chase after, usually the sheepdog or the sheep. </param>
     public void Chase(GameObject target)
     {
 
     }
 
-    // How the enemy should attack the target.
+    /// <summary>
+    /// How the enemy should attack the target.
+    /// </summary>
     private void Attack()
     {
 

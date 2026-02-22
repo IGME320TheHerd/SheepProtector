@@ -8,18 +8,19 @@ public abstract class Animal : MonoBehaviour
     protected float speed;
     protected bool isAlive = true;
 
-    // Before the first execution of Update, set up all variables and anything else that needs setting up.
-    protected abstract void Start();
-
-    // Called once a frame, update anything that needs to be updated and check anything that needs to be checked.
-    protected abstract void Update();
-
-    // How each animal should react (if at all) when the sheepdog barks.
+    /// <summary>
+    /// How each animal should react (if at all) when the sheepdog barks.
+    /// </summary>
+    /// <param name="callBackContext"></param>
     protected abstract void BarkReaction(ContextCallback callBackContext);
 
-    // How the animal should move.
+    /// <summary>
+    /// How the animal should move.
+    /// </summary>
     protected abstract void Movement();
 
-    // How the animal should die (if at all).
+    /// <summary>
+    /// How the animal should die (if at all).
+    /// </summary>
     protected abstract void Die();
 }
