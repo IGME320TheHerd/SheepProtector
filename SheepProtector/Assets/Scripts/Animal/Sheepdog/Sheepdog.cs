@@ -3,49 +3,68 @@ using UnityEngine;
 
 public class Sheepdog : Animal
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected override void Start()
+    /// <summary>
+    /// Start is called once before the first execution of Update after the MonoBehaviour is created
+    /// </summary>
+    private void Start()
     {
         
     }
 
-    // Update is called once per frame
-    protected override void Update()
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    private void FixedUpdate()
     {
         
     }
 
-    // Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
+    /// <summary>
+    /// Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
+    /// </summary>
+    /// <param name="callBackContext"></param>
     protected override void BarkReaction(ContextCallback callBackContext)
     {
         // Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     }
 
-    // What should happen if the sheepdog were to die.
+    /// <summary>
+    /// What should happen if the sheepdog were to die.
+    /// </summary>
     protected override void Die()
     {
         
     }
 
-    // How the sheepdog should move.
+    /// <summary>
+    /// Not used since the controls are elsewhere.
+    /// </summary>
     protected override void Movement()
     {
-        
+        // Not used since the controls are elsewhere.
     }
-    
-    // What should happen when the player uses the bark button.
+
+    /// <summary>
+    /// What should happen when the player uses the bark button.
+    /// </summary>
+    /// <param name="callBackContext"></param>
     private void Bark(ContextCallback callBackContext)
     {
 
     }
 
-    // How the sheepdog should pick up objects lying around the map.
+    /// <summary>
+    /// How the sheepdog should pick up objects lying around the map.
+    /// </summary>
     private void PickUp()
     {
 
     }
 
-    // How the sheepdog should react upon a collision.
+    /// <summary>
+    /// How the sheepdog should react upon a collision.
+    /// </summary>
+    /// <param name="other"> The other game object in the collision. </param>
     private void OnCollisionEnter(Collision other)
     {
 
