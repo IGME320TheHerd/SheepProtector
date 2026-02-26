@@ -1,45 +1,125 @@
+using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField]
     private string savePath;
 
-    private GameState gameState;
+    [SerializeField]
+    private GameObject pauseScreen;
+    [SerializeField]
+    private GameObject loadScreen;
+    [SerializeField]
+    private GameObject gameOverScreen;
+
+    [SerializeField]
+    private string mainMenuScene;
+
+    //This will be replaced with saving and loading!
+    [SerializeField]
+    private string gameScene;
+
+    private GameObject currentScreen;
+
+    public GameState State { get; private set; }
+
+    public static GameManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(this);
+        }
+
+        DontDestroyOnLoad(Instance);
+
+        //The main menu scene should already be loaded, directly set the state
+        State = GameState.MainMenu;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void setState(GameState state)
+    public void SetState(int stateIdx)
     {
-        switch (state)
+        switch ((GameState)stateIdx)
         {
             case GameState.Playing:
                 //Make sure pause menu is closed
                 //If coming from loading, enable controls
+                //This will be replaced with saving and loading!
+                if (State == GameState.MainMenu)
+                {
+                    Debug.Log("loading?");
+                    LoadScene(gameScene);
+                }
+
+                Unpause();
                 break;
             case GameState.Paused:
-                //Open pause menu, disable controls
+                //Open pause menu, pause time
+                SwitchScreenAndPause(pauseScreen);
                 break;
             case GameState.MainMenu:
-                //Load Main menu scene
+                //Load Main Menu Screen
+                LoadScene(mainMenuScene);
                 break;
             case GameState.GameOver:
                 //Display game over screen, do not switch scenes
+                SwitchScreenAndPause(gameOverScreen);
                 break;
             case GameState.Loading:
                 //Load gameplay scene, load data from save file, do startup
                 //Display loading screen (pause, gameover or mainmenu)
+                //TODO
                 break;
         }
+        State = (GameState)stateIdx;
+    }
+
+    void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
+
+    void SwitchScreenAndPause(GameObject switchTo)
+    {
+        if (currentScreen != null)
+        {
+            currentScreen.SetActive(false);
+        }
+
+        Time.timeScale = 0.0f;
+        switchTo.SetActive(true);
+        currentScreen = switchTo;
+    }
+
+    void Unpause()
+    {
+        if (currentScreen)
+        {
+            currentScreen.SetActive(false);
+            currentScreen = null;
+        }
+
+        Time.timeScale = 1.0f;
     }
 
     public void Save()
@@ -52,6 +132,7 @@ public class GameManager : MonoBehaviour
         //TODO 
     }
 
+    [Serializable]
     public enum GameState
     {
         Playing,
