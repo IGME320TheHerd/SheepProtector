@@ -18,8 +18,8 @@ public class Sheep : Animal
     // The sheep state the sheep is currently in.
     private SheepState currentState;
 
-    // The thirst meter for the sheep.
-    private float thirst;
+    // The thirst meter for the sheep. THIS IS CURRENTLY UNUSED!
+    //private float thirst;
 
     // Fields for sheep movement.
     [SerializeField] private float maxSpeed = 0.1f;
@@ -29,19 +29,22 @@ public class Sheep : Animal
     // When fleeing, this is the target the sheep flees from (for right now, it should be the player).
     [SerializeField] private GameObject fleeTarget;
 
+    // When wandering, this is the target the sheep wanders to.
+    [SerializeField] private Vector3 wanderPos;
+
+    [SerializeField] private GameObject Player;
+
 
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
     private void Start()
     {
-        // Sets the velocity of the sheep and the sheep's state to flee for now (will be removed in the future).
-        velocity = new Vector3(100.0f, 0.0f, 100.0f);
         currentState = SheepState.Still;
-        ToFleeState(fleeTarget.transform.position);
+        Player.GetComponent<Sheepdog>().barkReactors.Add(this);
 
-        // Set the thirst level of the sheep to 0.
-        thirst = 0.0f;
+        // Set the thirst level of the sheep to 0. THIS IS CURRENTLY UNUSED!
+        //thirst = 0.0f;
     }
 
     /// <summary>
@@ -68,9 +71,10 @@ public class Sheep : Animal
     /// How the sheep should react when the dog barks.
     /// </summary>
     /// <param name="callBackContext"></param>
-    protected override void BarkReaction(ContextCallback callBackContext)
+    public override void BarkReaction()//(ContextCallback callBackContext)
     {
         //fleeTarget = GameObject.Find("Player");
+        fleeTarget = Player;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -92,12 +96,24 @@ public class Sheep : Animal
             case SheepState.Still:
                 break;
             case SheepState.Wander:
-                break;
+                    Vector3 newPosition = Vector3.MoveTowards(transform.position, wanderPos, maxSpeed);
+                    newPosition.y = transform.position.y;
+                    GetComponent<Rigidbody>().MovePosition(newPosition);
+                
+                // If the sheep has reached its wander destination, put it in the still state.
+                if (transform.position.x == wanderPos.x && transform.position.z == wanderPos.z)
+                {
+                    ToStillState();
+                }
+                    break;
             case SheepState.Flee:
+                Vector3 nextPosition = transform.position;
+
                 // Update the position of the sheep based on the velocity and direction of the flee target.
-                transform.position = new Vector3(transform.position.x - (velocity.x * direction.x),
-                    transform.position.y,
-                    transform.position.z - (velocity.z * direction.z));
+                nextPosition = new Vector3(nextPosition.x - (velocity.x * direction.x),
+                    nextPosition.y,
+                    nextPosition.z - (velocity.z * direction.z));
+                GetComponent<Rigidbody>().MovePosition(nextPosition);
                 break;
         }
     }
@@ -129,9 +145,24 @@ public class Sheep : Animal
     /// <summary>
     /// How the sheep should transition everything to the wander state.
     /// </summary>
-    private void ToWanderState()
+    private void ToWanderState(Vector3 targetPos)
     {
         currentState = SheepState.Wander;
+        wanderPos = targetPos;
+
+        // Create the new direction the sheep should head in.
+        float directionX = 0.0f;
+        float directionZ = 0.0f;
+
+        // Move the sheep toward the target in the x direction.
+        directionX = transform.position.x - targetPos.x;
+
+        // Move the sheep toward the target in the z direction.
+        directionZ = +transform.position.z - targetPos.z;
+
+        // Create the direction the sheep will be moving in.
+        direction = new Vector3(directionX, 0.0f, directionZ);
+        direction.Normalize();
     }
 
     /// <summary>
@@ -154,8 +185,34 @@ public class Sheep : Animal
     /// How the sheep should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    private void OnCollisionEnter(Collision other)
+    public void OnCollisionEnter(Collision other)
     {
-        
+        //if (other.collider.GetType() == typeof(SphereCollider))
+        //{
+        //    Player.GetComponent<Sheepdog>().barkReactors.Add(this);
+        //}
+        // If the sheep hits a wall, move it away from that wall.
+        if (other.collider.GetType() == typeof(BoxCollider) && other.gameObject != Player)
+        {
+            if (currentState == SheepState.Flee || currentState == SheepState.Wander)
+            {
+                Vector3 newPosition = new Vector3(transform.position.x + (direction.x * 3),
+                    transform.position.y,
+                    transform.position.z + (direction.z * 3));
+                ToWanderState(newPosition);
+            }
+        }
     }
+
+    /// <summary>
+    /// How the sheep should react upon leaving a collision.
+    /// </summary>
+    /// <param name="other"> The other game object in the ending collision. </param>
+    //public void OnCollisionExit(Collision other)
+    //{
+    //    if (other.collider.GetType() == typeof(SphereCollider))
+    //    {
+    //        Player.GetComponent<Sheepdog>().barkReactors.Remove(this);
+    //    }
+    //}
 }
