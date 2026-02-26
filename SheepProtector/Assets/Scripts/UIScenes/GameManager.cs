@@ -1,5 +1,5 @@
 /// 
-/// SCENEMANAGER - written by Nao (sacanthias)
+/// GAMEMANAGER - written by Nao (sacanthias)
 /// PURPOSE - organize game state switches based off our FSM diagram
 /// LAST UPDATED - 2/18/26
 /// ________________________________________
@@ -11,8 +11,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.SceneManagement;
 
-public class SceneManager : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     // list of screens to reference later
     [SerializeField] private List<GameObject> screens;
@@ -26,7 +27,7 @@ public class SceneManager : MonoBehaviour
         get { return screenState; }
     }
     
-    public static SceneManager Instance { get; private set; }
+    public static GameManager Instance { get; private set; }
 
     // Singleton instance of SceneManager
     private void Awake()
@@ -53,14 +54,11 @@ public class SceneManager : MonoBehaviour
         // Each panel is the direct child of the Canvas element
         screens = new List<GameObject>();
 
-        // Resets every panel in the scenes list to "hidden".
-        // This is the default state for panels.
-        foreach(GameObject panel in GameObject.FindGameObjectsWithTag("Screen"))
-        {
-            screens.Add(panel);
-            panel.SetActive(false);
-            Debug.Log("Added " + panel.name);
-        }
+        // Retrieves the scenes
+        GetScreens();
+
+        // setting game time to zero, just in case
+        Time.timeScale = 0;
 
         SwitchScreen("StartScreen");
         Debug.Log("Switched to start screen");
@@ -72,6 +70,11 @@ public class SceneManager : MonoBehaviour
     public void QuitGame()
     {
         Application.Quit();
+    }
+
+    public void NewGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     /// <summary>
@@ -92,6 +95,33 @@ public class SceneManager : MonoBehaviour
             SwitchScreen("Playing");
             screenState = GameState.Playing;
         }
+    }
+
+    /// <summary>
+    /// Helper method for quickly retrieving all sub-panels in an individual scene.
+    /// </summary>
+    private void GetScreens()
+    {
+        screens.Clear();
+
+        // Resets every panel in the scenes list to "hidden".
+        // This is the default state for panels.
+        foreach (GameObject panel in GameObject.FindGameObjectsWithTag("Screen"))
+        {
+            screens.Add(panel);
+            panel.SetActive(false);
+            Debug.Log("Added " + panel.name);
+        }
+    }
+
+    /// <summary>
+    /// Switches to the specified scene based on the string passed
+    /// </summary>
+    /// <param name="sceneName">The name of the screen to switch to (case/spelling sensitive)</param>
+    public void SwitchScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+        GetScreens();
     }
 
     /// <summary>
