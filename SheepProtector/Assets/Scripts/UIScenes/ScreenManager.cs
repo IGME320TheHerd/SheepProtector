@@ -13,7 +13,7 @@ using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour
+public class ScreenManager : MonoBehaviour
 {
     // list of screens to reference later
     [SerializeField] private List<GameObject> screens;
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
         get { return screenState; }
     }
     
-    public static GameManager Instance { get; private set; }
+    public static ScreenManager Instance { get; private set; }
 
     // Singleton instance of SceneManager
     private void Awake()
