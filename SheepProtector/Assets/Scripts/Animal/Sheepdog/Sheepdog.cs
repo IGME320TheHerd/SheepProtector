@@ -4,13 +4,18 @@ using UnityEngine;
 
 public class Sheepdog : Animal
 {
+    // A list of all of the different animals that should react to bark.
     public System.Collections.Generic.List<Animal> barkReactors;
+
+    // Checks if the bark button is held down.
+    bool barkHeldDown;
+
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
     private void Start()
     {
-        
+        barkHeldDown = false;
     }
 
     /// <summary>
@@ -18,9 +23,20 @@ public class Sheepdog : Animal
     /// </summary>
     private void FixedUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.F))
+        // Check to see if the player wants to bark.
+        bool barkCheck = Input.GetButton("Bark");
+
+        // When the player presses down the bark button, have all bark actions go off.
+        if (barkCheck && !barkHeldDown)
         {
             Bark();
+            barkHeldDown = true;
+        }
+
+        // If the player is no longer holding down the bark button, reset the held down checker.
+        else if (!barkCheck && barkHeldDown)
+        {
+            barkHeldDown = false;
         }
     }
 
