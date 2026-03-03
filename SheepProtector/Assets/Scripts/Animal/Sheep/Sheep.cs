@@ -64,6 +64,8 @@ public class Sheep : Animal
             velocity.z = maxSpeed;
         }
 
+        GetComponent<Rigidbody>().linearVelocity -= Physics.gravity;
+
         Movement();
     }
 
@@ -185,14 +187,15 @@ public class Sheep : Animal
     /// How the sheep should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    public void OnCollisionEnter(Collision other)
+    public void OnTriggerEnter(Collider other)
     {
+        Debug.Log("AAA");
         //if (other.collider.GetType() == typeof(SphereCollider))
         //{
         //    Player.GetComponent<Sheepdog>().barkReactors.Add(this);
         //}
         // If the sheep hits a wall, move it away from that wall.
-        if (other.collider.GetType() == typeof(BoxCollider) && other.gameObject != Player)
+        if (other.GetComponent<Collider>().GetType() == typeof(BoxCollider) && other.gameObject != Player)
         {
             if (currentState == SheepState.Flee || currentState == SheepState.Wander)
             {
