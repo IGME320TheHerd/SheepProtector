@@ -1,14 +1,21 @@
+using NUnit.Framework;
 using System.Threading;
 using UnityEngine;
 
 public class Sheepdog : Animal
 {
+    // A list of all of the different animals that should react to bark.
+    public System.Collections.Generic.List<Animal> barkReactors;
+
+    // Checks if the bark button is held down.
+    bool barkHeldDown;
+
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
     private void Start()
     {
-        
+        barkHeldDown = false;
     }
 
     /// <summary>
@@ -16,14 +23,28 @@ public class Sheepdog : Animal
     /// </summary>
     private void FixedUpdate()
     {
-        
+        // Check to see if the player wants to bark.
+        bool barkCheck = Input.GetButton("Bark");
+
+        // When the player presses down the bark button, have all bark actions go off.
+        if (barkCheck && !barkHeldDown)
+        {
+            Bark();
+            barkHeldDown = true;
+        }
+
+        // If the player is no longer holding down the bark button, reset the held down checker.
+        else if (!barkCheck && barkHeldDown)
+        {
+            barkHeldDown = false;
+        }
     }
 
     /// <summary>
     /// Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     /// </summary>
     /// <param name="callBackContext"></param>
-    protected override void BarkReaction(ContextCallback callBackContext)
+    public override void BarkReaction()//(ContextCallback callBackContext)
     {
         // Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     }
@@ -48,9 +69,12 @@ public class Sheepdog : Animal
     /// What should happen when the player uses the bark button.
     /// </summary>
     /// <param name="callBackContext"></param>
-    private void Bark(ContextCallback callBackContext)
+    public void Bark()//(ContextCallback callBackContext)
     {
-
+        foreach (Animal animal in barkReactors)
+        {
+            animal.BarkReaction();
+        }
     }
 
     /// <summary>
