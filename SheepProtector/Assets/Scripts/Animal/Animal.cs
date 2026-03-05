@@ -12,7 +12,7 @@ public abstract class Animal : Agent
     /// How each animal should react (if at all) when the sheepdog barks.
     /// </summary>
     /// <param name="callBackContext"></param>
-    public abstract void BarkReaction();//(ContextCallback callBackContext);
+    public abstract void BarkReaction();
 
     /// <summary>
     /// How the animal should move.

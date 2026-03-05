@@ -29,9 +29,13 @@ public class Sheep : Animal
     // When wandering, this is the target the sheep wanders to.
     [SerializeField] private Vector3 wanderPos;
 
-    [SerializeField] private GameObject Player;
+    // The player's game object.
+    [SerializeField] private GameObject player;
 
+    // The weight of the sheep moving away from a wall.
     [SerializeField] private float wallFleeWeight = 0.5f;
+
+    // If the sheep gets this far away from a flee target, it will no longer be fleeing from that target.
     [SerializeField] private float leaveFleeDist = 10.0f;
 
     /// <summary>
@@ -40,7 +44,15 @@ public class Sheep : Animal
     private void Start()
     {
         currentState = SheepState.Still;
-        Player.GetComponent<Sheepdog>().barkReactors.Add(this);
+
+        // If the sheep's reference to the player game object is null, grab it.
+        if (player == null)
+        {
+            player = FindAnyObjectByType<Sheepdog>().gameObject;
+        }
+
+        // Add the player to the dog's bark reactors.
+        player.GetComponent<Sheepdog>().BarkReactors.Add(this);
 
         // Set the thirst level of the sheep to 0. THIS IS CURRENTLY UNUSED!
         //thirst = 0.0f;
@@ -54,10 +66,9 @@ public class Sheep : Animal
     /// How the sheep should react when the dog barks.
     /// </summary>
     /// <param name="callBackContext"></param>
-    public override void BarkReaction()//(ContextCallback callBackContext)
+    public override void BarkReaction()
     {
-        //fleeTarget = GameObject.Find("Player");
-        fleeTarget = Player;
+        fleeTarget = player;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -185,12 +196,8 @@ public class Sheep : Animal
     /// <param name="other"> The other game object in the collision. </param>
     private void OnCollisionStay(Collision collision)
     {
-        //if (other.collider.GetType() == typeof(SphereCollider))
-        //{
-        //    Player.GetComponent<Sheepdog>().barkReactors.Add(this);
-        //}
         // If the sheep hits a wall, move it away from that wall.
-        if (collision.collider.GetType() == typeof(BoxCollider) && collision.collider.gameObject != Player)
+        if (collision.collider.GetType() == typeof(BoxCollider) && collision.collider.gameObject != player)
         {
             if (currentState == SheepState.Flee || currentState == SheepState.Wander)
             {
@@ -204,16 +211,4 @@ public class Sheep : Animal
     {
         return Vector3.zero;
     }
-
-    /// <summary>
-    /// How the sheep should react upon leaving a collision.
-    /// </summary>
-    /// <param name="other"> The other game object in the ending collision. </param>
-    //public void OnCollisionExit(Collision other)
-    //{
-    //    if (other.collider.GetType() == typeof(SphereCollider))
-    //    {
-    //        Player.GetComponent<Sheepdog>().barkReactors.Remove(this);
-    //    }
-    //}
 }
