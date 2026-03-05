@@ -29,7 +29,7 @@ public class Enemy : Animal
     /// How the enemy should react when the dog barks near them.
     /// </summary>
     /// <param name="callBackContext"></param>
-    protected override void BarkReaction(ContextCallback callBackContext)
+    public override void BarkReaction()
     {
         
     }
@@ -65,5 +65,10 @@ public class Enemy : Animal
     private void Attack()
     {
 
+    }
+
+    protected override Vector3 CalcSteering()
+    {
+        throw new System.NotImplementedException();
     }
 }

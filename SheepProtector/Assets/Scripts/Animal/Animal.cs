@@ -1,7 +1,7 @@
 using System.Threading;
 using UnityEngine;
 
-public abstract class Animal : MonoBehaviour
+public abstract class Animal : Agent
 {
     // The variables that make up each animal.
     protected SpriteRenderer spriteRenderer;
@@ -12,7 +12,7 @@ public abstract class Animal : MonoBehaviour
     /// How each animal should react (if at all) when the sheepdog barks.
     /// </summary>
     /// <param name="callBackContext"></param>
-    protected abstract void BarkReaction(ContextCallback callBackContext);
+    public abstract void BarkReaction();
 
     /// <summary>
     /// How the animal should move.

@@ -2,6 +2,11 @@ using UnityEngine;
 
 public class Billboarding : MonoBehaviour
 {
+    [SerializeField]
+    bool isShadow;
+
+    [SerializeField]
+    Transform target;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -11,6 +16,13 @@ public class Billboarding : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.forward = Camera.main.transform.forward;
+        if (isShadow)
+        {
+            transform.forward = Vector3.Scale(target.forward, new Vector3(1, 0, 1));
+        }
+        else
+        {
+            transform.forward = target.forward;
+        }
     }
 }
