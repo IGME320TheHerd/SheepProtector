@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
 
         //The main menu scene should already be loaded, directly set the state
         State = GameState.MainMenu;
+        pauseScreen.SetActive(false);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -99,6 +100,19 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    // added to toggle on & off pause menu
+    public void PauseToggle()
+    {
+        if(State == GameState.Paused)
+        {
+            SetState(0);
+        }
+        else
+        {
+            SetState(2);
+        }
+    }
+
     void SwitchScreenAndPause(GameObject switchTo)
     {
         if (currentScreen != null)
@@ -113,9 +127,9 @@ public class GameManager : MonoBehaviour
 
     void Unpause()
     {
-        if (currentScreen)
+        if (pauseScreen.activeSelf || currentScreen)
         {
-            currentScreen.SetActive(false);
+            pauseScreen.SetActive(false);
             currentScreen = null;
         }
 

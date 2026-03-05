@@ -17,15 +17,6 @@ public class ScreenManager : MonoBehaviour
 {
     // list of screens to reference later
     [SerializeField] private List<GameObject> screens;
-
-    // GameState enum checker +
-    // Property for the current screen state that may be referenced by other scripts
-    private GameState screenState;
-
-    public GameState GameState
-    {
-        get { return screenState; }
-    }
     
     public static ScreenManager Instance { get; private set; }
 
@@ -47,9 +38,6 @@ public class ScreenManager : MonoBehaviour
     // Start initializes the key fields that will be used for state switching later on
     private void Start()
     {
-        // screenState is set to start by default
-        screenState = GameState.MainMenu;
-
         // Fills the scenes list with each panel "screen"
         // Each panel is the direct child of the Canvas element
         screens = new List<GameObject>();
@@ -60,8 +48,7 @@ public class ScreenManager : MonoBehaviour
         // setting game time to zero, just in case
         Time.timeScale = 0;
 
-        SwitchScreen("StartScreen");
-        Debug.Log("Switched to start screen");
+        SwitchScreen("MainMenu");
     }
 
     /// <summary>
@@ -74,27 +61,7 @@ public class ScreenManager : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
-
-    /// <summary>
-    /// Toggles the Pause Screen on and off based off a button input.
-    /// </summary>
-    public void PauseToggle()
-    {
-        // checks the current screen state
-        if(screenState != GameState.Paused)
-        {
-            // timeScale = 0 essentially pauses in-game time and prevents the player from moving
-            Time.timeScale = 0;
-            SwitchScreen("PauseMenu");
-        }
-        else
-        {
-            Time.timeScale = 1;
-            SwitchScreen("Playing");
-            screenState = GameState.Playing;
-        }
+        SceneManager.LoadScene(SceneManager.GetSceneByName("Greybox Map").buildIndex);
     }
 
     /// <summary>
@@ -121,7 +88,6 @@ public class ScreenManager : MonoBehaviour
     public void SwitchScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
-        GetScreens();
     }
 
     /// <summary>
@@ -159,16 +125,5 @@ public class ScreenManager : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        // this is really messy, but it basically checks the string passed through and changes the screen state accordingly
-        screenState = screenName switch
-        {
-            "StartScreen" => GameState.Playing,
-            "MainMenu" => GameState.MainMenu,
-            "PauseMenu" => GameState.Paused,
-            "SettingsMenu" => GameState.Paused,
-            "EndScreen" => GameState.GameOver,
-            // default case is used to set everything back to the playing state
-            _ => GameState.Playing,
-        };
     }
 }
