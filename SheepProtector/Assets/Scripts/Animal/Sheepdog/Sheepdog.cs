@@ -18,6 +18,11 @@ public class Sheepdog : Animal
         barkHeldDown = false;
     }
 
+    private void Update()
+    {
+        
+    }
+
     /// <summary>
     /// Update is called once per frame
     /// </summary>
@@ -92,5 +97,10 @@ public class Sheepdog : Animal
     private void OnCollisionEnter(Collision other)
     {
 
+    }
+
+    protected override Vector3 CalcSteering()
+    {
+        throw new System.NotImplementedException();
     }
 }

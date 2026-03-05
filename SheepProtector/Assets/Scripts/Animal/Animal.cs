@@ -1,7 +1,7 @@
 using System.Threading;
 using UnityEngine;
 
-public abstract class Animal : MonoBehaviour
+public abstract class Animal : Agent
 {
     // The variables that make up each animal.
     protected SpriteRenderer spriteRenderer;

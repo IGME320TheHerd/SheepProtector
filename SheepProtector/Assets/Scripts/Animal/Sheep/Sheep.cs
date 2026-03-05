@@ -1,4 +1,3 @@
-using System.Threading;
 using UnityEngine;
 
 /// <summary>
@@ -22,8 +21,6 @@ public class Sheep : Animal
     //private float thirst;
 
     // Fields for sheep movement.
-    [SerializeField] private float maxSpeed = 0.1f;
-    [SerializeField] private Vector3 velocity = new Vector3(0.0f, 0.0f, 0.0f);
     [SerializeField] private Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
 
     // When fleeing, this is the target the sheep flees from (for right now, it should be the player).
@@ -33,6 +30,8 @@ public class Sheep : Animal
     [SerializeField] private Vector3 wanderPos;
 
     [SerializeField] private GameObject Player;
+
+    [SerializeField] private float wallFleeWeight = 0.5f;
 
 
     /// <summary>
@@ -50,24 +49,6 @@ public class Sheep : Animal
     /// <summary>
     /// Update is called once per frame
     /// </summary>
-    private void FixedUpdate()
-    {
-        // If the velocity in the x direction is greater than the max speed, reduce it to the max speed.
-        if (velocity.x > maxSpeed)
-        {
-            velocity.x = maxSpeed;
-        }
-
-        // If the velocity in the z direction is greater than the max speed, reduce it to the max speed.
-        if (velocity.z > maxSpeed)
-        {
-            velocity.z = maxSpeed;
-        }
-
-        GetComponent<Rigidbody>().linearVelocity -= Physics.gravity;
-
-        Movement();
-    }
 
     /// <summary>
     /// How the sheep should react when the dog barks.
@@ -86,6 +67,14 @@ public class Sheep : Animal
     protected override void Die()
     {
         
+    }
+
+    private void Update()
+    {
+        acceleration = Vector3.zero;
+        Movement();
+
+        acceleration.y = 0.0f;
     }
 
     /// <summary>
@@ -109,15 +98,27 @@ public class Sheep : Animal
                 }
                     break;
             case SheepState.Flee:
-                Vector3 nextPosition = transform.position;
-
-                // Update the position of the sheep based on the velocity and direction of the flee target.
-                nextPosition = new Vector3(nextPosition.x - (velocity.x * direction.x),
-                    nextPosition.y,
-                    nextPosition.z - (velocity.z * direction.z));
-                GetComponent<Rigidbody>().MovePosition(nextPosition);
+                acceleration += Flee(Player);
                 break;
         }
+
+        RaycastHit hit;
+        RaycastHit hit2;
+
+        float hitdist = 5.0f;
+
+        if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
+        {
+            acceleration += hit.normal * wallFleeWeight * (Mathf.Sqrt(hit.distance) / hitdist);
+        }
+
+        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
+        {
+            acceleration += hit2.normal * wallFleeWeight * (Mathf.Sqrt(hit2.distance) / hitdist);
+        }
+
+        Debug.DrawRay(transform.position, velocity.normalized * hitdist, Color.red);
+        Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, transform.up), Color.blue);
     }
 
     /// <summary>
@@ -128,20 +129,6 @@ public class Sheep : Animal
     {
         // Change the state of the sheep.
         currentState = SheepState.Flee;
-
-        // Create the new direction the sheep should head in.
-        float directionX = 0.0f;
-        float directionZ = 0.0f;
-
-        // Move the sheep away from the target in the x direction.
-        directionX = -transform.position.x + fleeTarget.transform.position.x;
-
-        // Move the sheep away from the target in the z direction.
-        directionZ = -transform.position.z + fleeTarget.transform.position.z;
-
-        // Create the direction the sheep will be moving in.
-        direction = new Vector3(directionX, 0.0f, directionZ);
-        direction.Normalize();
     }
 
     /// <summary>
@@ -187,24 +174,26 @@ public class Sheep : Animal
     /// How the sheep should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    public void OnTriggerEnter(Collider other)
+    private void OnCollisionStay(Collision collision)
     {
-        Debug.Log("AAA");
         //if (other.collider.GetType() == typeof(SphereCollider))
         //{
         //    Player.GetComponent<Sheepdog>().barkReactors.Add(this);
         //}
         // If the sheep hits a wall, move it away from that wall.
-        if (other.GetComponent<Collider>().GetType() == typeof(BoxCollider) && other.gameObject != Player)
+        if (collision.collider.GetType() == typeof(BoxCollider) && collision.collider.gameObject != Player)
         {
             if (currentState == SheepState.Flee || currentState == SheepState.Wander)
             {
-                Vector3 newPosition = new Vector3(transform.position.x + (direction.x * 3),
-                    transform.position.y,
-                    transform.position.z + (direction.z * 3));
-                ToWanderState(newPosition);
+                //velocity = 
+               //acceleration += Flee(collision.GetContact(0).point);
             }
         }
+    }
+
+    protected override Vector3 CalcSteering()
+    {
+        return Vector3.zero;
     }
 
     /// <summary>

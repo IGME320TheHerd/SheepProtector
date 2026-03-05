@@ -66,4 +66,9 @@ public class Enemy : Animal
     {
 
     }
+
+    protected override Vector3 CalcSteering()
+    {
+        throw new System.NotImplementedException();
+    }
 }
