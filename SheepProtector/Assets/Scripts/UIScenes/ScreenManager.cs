@@ -1,5 +1,5 @@
 /// 
-/// SCENEMANAGER - written by Nao (sacanthias)
+/// GAMEMANAGER - written by Nao (sacanthias)
 /// PURPOSE - organize game state switches based off our FSM diagram
 /// LAST UPDATED - 2/18/26
 /// ________________________________________
@@ -11,22 +11,14 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEngine.Rendering.DebugUI;
+using UnityEngine.SceneManagement;
 
-public class SceneManager : MonoBehaviour
+public class ScreenManager : MonoBehaviour
 {
     // list of screens to reference later
     [SerializeField] private List<GameObject> screens;
-
-    // GameState enum checker +
-    // Property for the current screen state that may be referenced by other scripts
-    private GameState screenState;
-
-    public GameState GameState
-    {
-        get { return screenState; }
-    }
     
-    public static SceneManager Instance { get; private set; }
+    public static ScreenManager Instance { get; private set; }
 
     // Singleton instance of SceneManager
     private void Awake()
@@ -46,24 +38,17 @@ public class SceneManager : MonoBehaviour
     // Start initializes the key fields that will be used for state switching later on
     private void Start()
     {
-        // screenState is set to start by default
-        screenState = GameState.MainMenu;
-
         // Fills the scenes list with each panel "screen"
         // Each panel is the direct child of the Canvas element
         screens = new List<GameObject>();
 
-        // Resets every panel in the scenes list to "hidden".
-        // This is the default state for panels.
-        foreach(GameObject panel in GameObject.FindGameObjectsWithTag("Screen"))
-        {
-            screens.Add(panel);
-            panel.SetActive(false);
-            Debug.Log("Added " + panel.name);
-        }
+        // Retrieves the scenes
+        GetScreens();
 
-        SwitchScreen("StartScreen");
-        Debug.Log("Switched to start screen");
+        // setting game time to zero, just in case
+        Time.timeScale = 0;
+
+        SwitchScreen("MainMenu");
     }
 
     /// <summary>
@@ -74,24 +59,35 @@ public class SceneManager : MonoBehaviour
         Application.Quit();
     }
 
-    /// <summary>
-    /// Toggles the Pause Screen on and off based off a button input.
-    /// </summary>
-    public void PauseToggle()
+    public void NewGame()
     {
-        // checks the current screen state
-        if(screenState != GameState.Paused)
+        SceneManager.LoadScene(SceneManager.GetSceneByName("Greybox Map").buildIndex);
+    }
+
+    /// <summary>
+    /// Helper method for quickly retrieving all sub-panels in an individual scene.
+    /// </summary>
+    private void GetScreens()
+    {
+        screens.Clear();
+
+        // Resets every panel in the scenes list to "hidden".
+        // This is the default state for panels.
+        foreach (GameObject panel in GameObject.FindGameObjectsWithTag("Screen"))
         {
-            // timeScale = 0 essentially pauses in-game time and prevents the player from moving
-            Time.timeScale = 0;
-            SwitchScreen("PauseMenu");
+            screens.Add(panel);
+            panel.SetActive(false);
+            Debug.Log("Added " + panel.name);
         }
-        else
-        {
-            Time.timeScale = 1;
-            SwitchScreen("Playing");
-            screenState = GameState.Playing;
-        }
+    }
+
+    /// <summary>
+    /// Switches to the specified scene based on the string passed
+    /// </summary>
+    /// <param name="sceneName">The name of the screen to switch to (case/spelling sensitive)</param>
+    public void SwitchScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
     }
 
     /// <summary>
@@ -129,16 +125,5 @@ public class SceneManager : MonoBehaviour
             Time.timeScale = 1;
         }
 
-        // this is really messy, but it basically checks the string passed through and changes the screen state accordingly
-        screenState = screenName switch
-        {
-            "StartScreen" => GameState.Playing,
-            "MainMenu" => GameState.MainMenu,
-            "PauseMenu" => GameState.Paused,
-            "SettingsMenu" => GameState.Paused,
-            "EndScreen" => GameState.GameOver,
-            // default case is used to set everything back to the playing state
-            _ => GameState.Playing,
-        };
     }
 }
