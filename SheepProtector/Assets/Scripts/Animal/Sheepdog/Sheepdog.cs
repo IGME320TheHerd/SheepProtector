@@ -5,7 +5,16 @@ using UnityEngine;
 public class Sheepdog : Animal
 {
     // A list of all of the different animals that should react to bark.
-    public System.Collections.Generic.List<Animal> barkReactors;
+    private System.Collections.Generic.List<Animal> barkReactors;
+
+    /// <summary>
+    /// Making barkReactors public so other things can add themselves to it.
+    /// </summary>
+    public System.Collections.Generic.List<Animal> BarkReactors
+    {
+        get { return barkReactors; }
+        set { barkReactors = value; }
+    }
 
     // Checks if the bark button is held down.
     bool barkHeldDown;
@@ -16,6 +25,7 @@ public class Sheepdog : Animal
     private void Start()
     {
         barkHeldDown = false;
+        barkReactors = new System.Collections.Generic.List<Animal>();
     }
 
     /// <summary>
@@ -43,8 +53,7 @@ public class Sheepdog : Animal
     /// <summary>
     /// Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     /// </summary>
-    /// <param name="callBackContext"></param>
-    public override void BarkReaction()//(ContextCallback callBackContext)
+    public override void BarkReaction()
     {
         // Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     }
@@ -71,9 +80,9 @@ public class Sheepdog : Animal
     /// <param name="callBackContext"></param>
     public void Bark()//(ContextCallback callBackContext)
     {
-        foreach (Animal animal in barkReactors)
+        for (int i = 0; i < barkReactors.Count; i++)
         {
-            animal.BarkReaction();
+            barkReactors[i].BarkReaction();
         }
     }
 
@@ -92,5 +101,37 @@ public class Sheepdog : Animal
     private void OnCollisionEnter(Collision other)
     {
 
+    }
+
+    /// <summary>
+    /// How the sheepdog should react upon an enter trigger going off.
+    /// </summary>
+    /// <param name="other"> The other game object's collider. </param>
+    public void OnTriggerEnter(Collider other)
+    {
+        // If the trigger is an animalk, add if to the dog's list of bark reactions if it is not already there.
+        if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
+        {
+            if (!barkReactors.Contains(otherAnimal))
+            {
+                barkReactors.Add(otherAnimal);
+            }
+        }
+    }
+
+    /// <summary>
+    /// How the sheepdog should react upon hitting an exit trigger going off.
+    /// </summary>
+    /// <param name="other"> The other game object's collider. </param>
+    public void OnTriggerExit(Collider other)
+    {
+        // If the other object is an animal, remove it from the dog's list of bark reactions
+        if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
+        {
+            if (barkReactors.Contains(otherAnimal))
+            {
+                barkReactors.Remove(otherAnimal);
+            }
+        }
     }
 }

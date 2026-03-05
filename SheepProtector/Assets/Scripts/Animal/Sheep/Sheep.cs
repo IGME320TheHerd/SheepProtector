@@ -25,6 +25,11 @@ public class Sheep : Animal
     [SerializeField] private float maxSpeed = 0.1f;
     [SerializeField] private Vector3 velocity = new Vector3(0.0f, 0.0f, 0.0f);
     [SerializeField] private Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
+    [SerializeField] private Vector3 acceleration = new Vector3(0.0f, 0.0f, 0.0f);
+
+    // Prevent the sheep from getting stuck on a wall
+    private bool stuck;
+    private short stuckCounter;
 
     // When fleeing, this is the target the sheep flees from (for right now, it should be the player).
     [SerializeField] private GameObject fleeTarget;
@@ -32,7 +37,8 @@ public class Sheep : Animal
     // When wandering, this is the target the sheep wanders to.
     [SerializeField] private Vector3 wanderPos;
 
-    [SerializeField] private GameObject Player;
+    // The player's game object.
+    [SerializeField] private GameObject player;
 
 
     /// <summary>
@@ -40,8 +46,20 @@ public class Sheep : Animal
     /// </summary>
     private void Start()
     {
+        // Have the starting state be the still state.
         currentState = SheepState.Still;
-        Player.GetComponent<Sheepdog>().barkReactors.Add(this);
+
+        // If the sheep's reference to the player game object is null, grab it.
+        if (player == null)
+        {
+            player = FindAnyObjectByType<Sheepdog>().gameObject;
+        }
+
+        // Add the player to the dog's bark reactors.
+        player.GetComponent<Sheepdog>().BarkReactors.Add(this);
+
+        stuck = false;
+        stuckCounter = 0;
 
         // Set the thirst level of the sheep to 0. THIS IS CURRENTLY UNUSED!
         //thirst = 0.0f;
@@ -72,11 +90,9 @@ public class Sheep : Animal
     /// <summary>
     /// How the sheep should react when the dog barks.
     /// </summary>
-    /// <param name="callBackContext"></param>
-    public override void BarkReaction()//(ContextCallback callBackContext)
+    public override void BarkReaction()
     {
-        //fleeTarget = GameObject.Find("Player");
-        fleeTarget = Player;
+        fleeTarget = player;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -115,7 +131,28 @@ public class Sheep : Animal
                 nextPosition = new Vector3(nextPosition.x - (velocity.x * direction.x),
                     nextPosition.y,
                     nextPosition.z - (velocity.z * direction.z));
-                GetComponent<Rigidbody>().MovePosition(nextPosition);
+
+                // Check to see if the sheep is stuck in the wall.
+                if (stuck)
+                {
+                    stuckCounter++;
+
+                    // If the sheep is stuck in the wall, have it move towards the player.
+                    if (stuckCounter == 100)
+                    {
+                        Vector3 newWanderPosition = new Vector3(player.transform.position.x,
+                    transform.position.y,
+                    player.transform.position.z);
+                        ToWanderState(newWanderPosition);
+                    }
+                }
+                else
+                {
+                    stuckCounter = 0;
+                    //GetComponent<Rigidbody>().MovePosition(nextPosition);
+                    transform.position = nextPosition;
+                }
+
                 break;
         }
     }
@@ -189,13 +226,8 @@ public class Sheep : Animal
     /// <param name="other"> The other game object in the collision. </param>
     public void OnTriggerEnter(Collider other)
     {
-        Debug.Log("AAA");
-        //if (other.collider.GetType() == typeof(SphereCollider))
-        //{
-        //    Player.GetComponent<Sheepdog>().barkReactors.Add(this);
-        //}
         // If the sheep hits a wall, move it away from that wall.
-        if (other.GetComponent<Collider>().GetType() == typeof(BoxCollider) && other.gameObject != Player)
+        if (other.GetComponent<Collider>().GetType() == typeof(BoxCollider) && other.gameObject != player)
         {
             if (currentState == SheepState.Flee || currentState == SheepState.Wander)
             {
@@ -203,19 +235,21 @@ public class Sheep : Animal
                     transform.position.y,
                     transform.position.z + (direction.z * 3));
                 ToWanderState(newPosition);
+                stuck = true;
             }
         }
     }
 
     /// <summary>
-    /// How the sheep should react upon leaving a collision.
+    /// How the sheepdog should react upon hitting an exit trigger going off.
     /// </summary>
-    /// <param name="other"> The other game object in the ending collision. </param>
-    //public void OnCollisionExit(Collision other)
-    //{
-    //    if (other.collider.GetType() == typeof(SphereCollider))
-    //    {
-    //        Player.GetComponent<Sheepdog>().barkReactors.Remove(this);
-    //    }
-    //}
+    /// <param name="other"> The other game object's collider. </param>
+    public void OnTriggerExit(Collider other)
+    {
+        // If the sheep is not stuck in a wall, update flee stuff so it knows to no longer have stuck protections.
+        if (other.GetType() == typeof(BoxCollider) && other.gameObject != player)
+        {
+            stuck = false;
+        }
+    }
 }

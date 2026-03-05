@@ -28,8 +28,7 @@ public class Enemy : Animal
     /// <summary>
     /// How the enemy should react when the dog barks near them.
     /// </summary>
-    /// <param name="callBackContext"></param>
-    public override void BarkReaction()//(ContextCallback callBackContext)
+    public override void BarkReaction()
     {
         
     }
