@@ -138,6 +138,11 @@ public class Sheepdog : Animal
             {
                 barkReactors.Remove(otherAnimal);
             }
+
+            if (other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep))
+            {
+                otherSheep.LeaveBark();
+            }
         }
     }
 

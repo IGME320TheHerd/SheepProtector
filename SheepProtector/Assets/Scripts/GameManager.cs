@@ -14,6 +14,11 @@ public class GameManager : MonoBehaviour
     private GameObject loadScreen;
     [SerializeField]
     private GameObject gameOverScreen;
+    [SerializeField]
+    private GameObject pauseCanvas;
+
+    [SerializeField]
+    private GameObject eventSystemUI;
 
     [SerializeField]
     private string mainMenuScene;
@@ -37,9 +42,12 @@ public class GameManager : MonoBehaviour
         else if (Instance != this)
         {
             Destroy(this);
+            return;
         }
 
         DontDestroyOnLoad(Instance);
+        DontDestroyOnLoad(pauseCanvas);
+        DontDestroyOnLoad(eventSystemUI);
 
         //The main menu scene should already be loaded, directly set the state
         State = GameState.MainMenu;
@@ -55,7 +63,16 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (State == GameState.Playing)
+            {
+                SetState((int)GameState.Paused);
+            } else
+            {
+                SetState((int)GameState.Playing);
+            }
+        }
     }
 
     public void SetState(int stateIdx)
@@ -134,6 +151,11 @@ public class GameManager : MonoBehaviour
         }
 
         Time.timeScale = 1.0f;
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
     }
 
     public void Save()

@@ -38,6 +38,10 @@ public class Sheep : Animal
     // If the sheep gets this far away from a flee target, it will no longer be fleeing from that target.
     [SerializeField] private float leaveFleeDist = 10.0f;
 
+    private float randomWanderTimer = 6.0f;
+
+    private float stopWanderTimer = 5.0f;
+
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
@@ -50,9 +54,6 @@ public class Sheep : Animal
         {
             player = FindAnyObjectByType<Sheepdog>().gameObject;
         }
-
-        // Add the player to the dog's bark reactors.
-        player.GetComponent<Sheepdog>().BarkReactors.Add(this);
 
         // Set the thirst level of the sheep to 0. THIS IS CURRENTLY UNUSED!
         //thirst = 0.0f;
@@ -88,6 +89,11 @@ public class Sheep : Animal
         acceleration.y = 0.0f;
     }
 
+    public void LeaveBark()
+    {
+        ToStillState();
+    }
+
     /// <summary>
     /// How the sheep should move depending on its current state.
     /// </summary>
@@ -96,18 +102,27 @@ public class Sheep : Animal
         switch(currentState)
         {
             case SheepState.Still:
+                randomWanderTimer -= Time.deltaTime;
+
+                if (randomWanderTimer <= 0.0f)
+                {
+                    float rng = Random.Range(0, 100);
+                    if (rng <= 30.0f)
+                    {
+                        ToWanderState();
+                    }
+                    randomWanderTimer = 6.0f;
+                }
                 break;
             case SheepState.Wander:
-                    Vector3 newPosition = Vector3.MoveTowards(transform.position, wanderPos, maxSpeed);
-                    newPosition.y = transform.position.y;
-                    GetComponent<Rigidbody>().MovePosition(newPosition);
-                
-                // If the sheep has reached its wander destination, put it in the still state.
-                if (transform.position.x == wanderPos.x && transform.position.z == wanderPos.z)
+                stopWanderTimer -= Time.deltaTime;
+
+                if (stopWanderTimer <= 0.0f)
                 {
                     ToStillState();
                 }
-                    break;
+                acceleration += Wander(2.0f, 5.0f, 0.5f);
+                break;
             case SheepState.Flee:
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
                 acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
@@ -147,6 +162,7 @@ public class Sheep : Animal
     /// <param name="targetPos"> The position the sheep should flee from, usually an animal's position. </param>
     private void ToFleeState(Vector3 targetPos)
     {
+        maxSpeed = 7.0f;
         // Change the state of the sheep.
         currentState = SheepState.Flee;
     }
@@ -154,24 +170,11 @@ public class Sheep : Animal
     /// <summary>
     /// How the sheep should transition everything to the wander state.
     /// </summary>
-    private void ToWanderState(Vector3 targetPos)
+    private void ToWanderState()
     {
+        maxSpeed = 2.0f;
+        randomWanderTimer = 5.0f;
         currentState = SheepState.Wander;
-        wanderPos = targetPos;
-
-        // Create the new direction the sheep should head in.
-        float directionX = 0.0f;
-        float directionZ = 0.0f;
-
-        // Move the sheep toward the target in the x direction.
-        directionX = transform.position.x - targetPos.x;
-
-        // Move the sheep toward the target in the z direction.
-        directionZ = +transform.position.z - targetPos.z;
-
-        // Create the direction the sheep will be moving in.
-        direction = new Vector3(directionX, 0.0f, directionZ);
-        direction.Normalize();
     }
 
     /// <summary>
@@ -179,6 +182,7 @@ public class Sheep : Animal
     /// </summary>
     private void ToStillState()
     {
+        maxSpeed = 0.0f;
         currentState = SheepState.Still;
     }
 
