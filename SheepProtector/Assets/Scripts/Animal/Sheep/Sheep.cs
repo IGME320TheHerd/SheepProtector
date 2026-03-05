@@ -32,7 +32,7 @@ public class Sheep : Animal
     [SerializeField] private GameObject Player;
 
     [SerializeField] private float wallFleeWeight = 0.5f;
-
+    [SerializeField] private float leaveFleeDist = 10.0f;
 
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -98,27 +98,36 @@ public class Sheep : Animal
                 }
                     break;
             case SheepState.Flee:
-                acceleration += Flee(Player);
+                float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
+                acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
                 break;
         }
 
         RaycastHit hit;
         RaycastHit hit2;
+        RaycastHit hit3;
 
         float hitdist = 5.0f;
 
         if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
         {
-            acceleration += hit.normal * wallFleeWeight * (Mathf.Sqrt(hit.distance) / hitdist);
+            acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
         }
 
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
         {
-            acceleration += hit2.normal * wallFleeWeight * (Mathf.Sqrt(hit2.distance) / hitdist);
+            acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
         }
+
+        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
+        {
+            acceleration += hit3.normal * wallFleeWeight * ((1/hit3.distance) / hitdist);
+        }
+
 
         Debug.DrawRay(transform.position, velocity.normalized * hitdist, Color.red);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, transform.up), Color.blue);
+        Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, -transform.up), Color.green);
     }
 
     /// <summary>
