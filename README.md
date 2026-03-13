@@ -80,12 +80,12 @@ Upload any images in the images folder and any non-image files (PDFs, etc.) into
 Images in Markdown are formatted like this:
 
 ```md
-![Image Alt Text](/assets/folder/file.jpg)
+![Image Alt Text]({{ site.baseurl }}/folder/file.jpg)
 ```
 
 and links are formatted like this:
 ```md
-[Link Text](/assets/folder/file.pdf)
+[Link Text]({{ site.baseurl }}/folder/file.pdf)
 ```
 
 and, uh, yeah. That's pretty much it. For more in-depth information, consult the [Jekyll Posts Docs](https://jekyllrb.com/docs/posts/). Happy posting!
