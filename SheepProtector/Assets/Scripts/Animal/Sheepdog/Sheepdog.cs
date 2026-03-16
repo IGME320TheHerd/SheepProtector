@@ -58,7 +58,6 @@ public class Sheepdog : Animal
     /// <summary>
     /// Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     /// </summary>
-    /// <param name="callBackContext"></param>
     public override void BarkReaction()
     {
         // Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
@@ -67,7 +66,7 @@ public class Sheepdog : Animal
     /// <summary>
     /// What should happen if the sheepdog were to die.
     /// </summary>
-    protected override void Die()
+    public override void Die()
     {
         
     }

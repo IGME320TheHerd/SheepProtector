@@ -60,13 +60,8 @@ public class Sheep : Animal
     }
 
     /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-
-    /// <summary>
     /// How the sheep should react when the dog barks.
     /// </summary>
-    /// <param name="callBackContext"></param>
     public override void BarkReaction()
     {
         fleeTarget = player;
@@ -76,7 +71,7 @@ public class Sheep : Animal
     /// <summary>
     /// What should happen if the sheep were to die.
     /// </summary>
-    protected override void Die()
+    public override void Die()
     {
         
     }
@@ -101,11 +96,14 @@ public class Sheep : Animal
     {
         switch(currentState)
         {
+            // If the sheep is in the still state, have it wander at random.
             case SheepState.Still:
                 randomWanderTimer -= Time.deltaTime;
 
+                // If the random wander timer reaches 0, check to see if the sheep should wander.
                 if (randomWanderTimer <= 0.0f)
                 {
+                    // If the sheep passes a random number check, have it wander to a random nearby point.
                     float rng = Random.Range(0, 100);
                     if (rng <= 30.0f)
                     {
@@ -114,15 +112,20 @@ public class Sheep : Animal
                     randomWanderTimer = 6.0f;
                 }
                 break;
+
+            // If the sheep is wandering, have the acceleration face towards the specific target.
             case SheepState.Wander:
                 stopWanderTimer -= Time.deltaTime;
 
+                // If the sheep wanders for too long, have it stop wandering.
                 if (stopWanderTimer <= 0.0f)
                 {
                     ToStillState();
                 }
                 acceleration += Wander(2.0f, 5.0f, 0.5f);
                 break;
+
+            // If the sheep is fleeing, have the acceleration face away the specific target.
             case SheepState.Flee:
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
                 acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
@@ -135,22 +138,25 @@ public class Sheep : Animal
 
         float hitdist = 5.0f;
 
+        // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
         {
             acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
         }
 
+        // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
         {
             acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
         }
 
+        // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
         {
             acceleration += hit3.normal * wallFleeWeight * ((1/hit3.distance) / hitdist);
         }
 
-
+        // Draw the rays with gizmos active to show the direction of the sheep.
         Debug.DrawRay(transform.position, velocity.normalized * hitdist, Color.red);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, transform.up), Color.blue);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, -transform.up), Color.green);
