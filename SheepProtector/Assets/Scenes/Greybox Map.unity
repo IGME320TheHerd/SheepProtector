@@ -8028,8 +8028,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: f83e3a22009fa9a40a3a0cb168665766, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -19437,8 +19437,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Paused
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ba4fa689507557845807b4bd3a0656e9, type: 2}
+  m_sharedMaterial: {fileID: 7021276788909302947, guid: ba4fa689507557845807b4bd3a0656e9, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -24888,9 +24888,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1087186297}
         m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: QuitGame
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -33493,8 +33493,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Press Esc to return
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c645b554aae73b142802d17d8aa26142, type: 2}
+  m_sharedMaterial: {fileID: 1559738391984616729, guid: c645b554aae73b142802d17d8aa26142, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -35557,6 +35557,8 @@ MonoBehaviour:
   pauseScreen: {fileID: 474711644}
   loadScreen: {fileID: 0}
   gameOverScreen: {fileID: 0}
+  pauseCanvas: {fileID: 0}
+  eventSystemUI: {fileID: 0}
   mainMenuScene: MainMenu
   gameScene: Greybox Map
 --- !u!114 &2010161545
@@ -38945,6 +38947,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c11ec2be09d39e642ab4686b1f906b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShadow: 0
+  target: {fileID: 0}
 --- !u!54 &2139590824
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -39024,7 +39028,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!65 &2139590826
