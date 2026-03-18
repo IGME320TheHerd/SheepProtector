@@ -6,7 +6,8 @@ using UnityEngine;
 /// Wander - the sheep randomly wandering around its current location.
 /// Still - the sheep not moving around at all.
 /// </summary>
-enum SheepState { 
+enum SheepState
+{
     Flee,
     Wander,
     Still
@@ -42,12 +43,27 @@ public class Sheep : Animal
 
     private float stopWanderTimer = 5.0f;
 
+    // True if the sheep is fleeing from the sheepdog for being too close, false if not.
+    private bool tooClose;
+
+    /// <summary>
+    /// Make tooClose public;
+    /// True if the sheep is fleeing from the sheepdog for being too close, false if not.
+    /// </summary>
+    public bool TooClose
+    {
+        get {  return !tooClose; }
+        set { tooClose = value; }
+    }
+
+
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
     private void Start()
     {
         currentState = SheepState.Still;
+        tooClose = false;
 
         // If the sheep's reference to the player game object is null, grab it.
         if (player == null)
@@ -73,7 +89,7 @@ public class Sheep : Animal
     /// </summary>
     public override void Die()
     {
-        
+
     }
 
     private void Update()
@@ -94,7 +110,7 @@ public class Sheep : Animal
     /// </summary>
     protected override void Movement()
     {
-        switch(currentState)
+        switch (currentState)
         {
             // If the sheep is in the still state, have it wander at random.
             case SheepState.Still:
@@ -153,13 +169,14 @@ public class Sheep : Animal
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
         {
-            acceleration += hit3.normal * wallFleeWeight * ((1/hit3.distance) / hitdist);
+            acceleration += hit3.normal * wallFleeWeight * ((1 / hit3.distance) / hitdist);
         }
 
         // Draw the rays with gizmos active to show the direction of the sheep.
         Debug.DrawRay(transform.position, velocity.normalized * hitdist, Color.red);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, transform.up), Color.blue);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, -transform.up), Color.green);
+
     }
 
     /// <summary>
@@ -201,19 +218,37 @@ public class Sheep : Animal
     }
 
     /// <summary>
-    /// How the sheep should react upon a collision.
+    /// How the sheep should react upon an enter trigger.
     /// </summary>
-    /// <param name="other"> The other game object in the collision. </param>
-    private void OnCollisionStay(Collision collision)
+    /// <param name="other"> The other game object in the trigger. </param>
+    private void OnTriggerEnter(Collider other)
     {
-        // If the sheep hits a wall, move it away from that wall.
-        if (collision.collider.GetType() == typeof(BoxCollider) && collision.collider.gameObject != player)
+        // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
+        // have it flee from the dog until it gets far enough away.
+        if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
+            && other.GetType() != typeof(SphereCollider)
+            && currentState != SheepState.Flee)
         {
-            if (currentState == SheepState.Flee || currentState == SheepState.Wander)
-            {
-                //velocity = 
-               //acceleration += Flee(collision.GetContact(0).point);
-            }
+            tooClose = true;
+            fleeTarget = other.gameObject;
+            ToFleeState(fleeTarget.transform.position);
+        }
+    }
+
+    /// <summary>
+    /// How the sheep should react upon an exit trigger.
+    /// </summary>
+    /// <param name="other"> The other game object in the trigger. </param>
+    private void OnTriggerExit(Collider other)
+    {
+        // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
+        // have it flee from the dog until it gets far enough away.
+        if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
+            && other.GetType() != typeof(SphereCollider)
+            && tooClose)
+        {
+            tooClose = false;
+            ToStillState();
         }
     }
 

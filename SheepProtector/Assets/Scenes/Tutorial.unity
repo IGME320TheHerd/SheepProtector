@@ -769,6 +769,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rBody: {fileID: 0}
   maxSpeed: 0
+  herdDist: 5
+  herdStrength: 50
 --- !u!1 &812613030
 GameObject:
   m_ObjectHideFlags: 0
@@ -1712,7 +1714,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!54 &1629424927
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2679,6 +2681,7 @@ GameObject:
   - component: {fileID: 2071334691}
   - component: {fileID: 2071334693}
   - component: {fileID: 2071334694}
+  - component: {fileID: 2071334695}
   m_Layer: 0
   m_Name: Sheep
   m_TagString: Untagged
@@ -2772,6 +2775,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!135 &2071334695
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2071334689}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 6
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2076757451
 GameObject:
   m_ObjectHideFlags: 0
