@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject pauseScreen;
     [SerializeField]
+    private GameObject controlsScreen;
+    [SerializeField]
     private GameObject loadScreen;
     [SerializeField]
     private GameObject gameOverScreen;
@@ -130,7 +132,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void SwitchScreenAndPause(GameObject switchTo)
+    public void SwitchScreenAndPause(GameObject switchTo)
     {
         if (currentScreen != null)
         {
