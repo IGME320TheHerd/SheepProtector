@@ -26,6 +26,10 @@ public class Sheep : Animal
 
     // When fleeing, this is the target the sheep flees from (for right now, it should be the player).
     [SerializeField] private GameObject fleeTarget;
+    [SerializeField] private float maxBarkTimer = 5.0f;
+    private float barkTimer = 0.0f;
+    bool timeLowered = false;
+    [SerializeField] private int barkCount = 0;
 
     // When wandering, this is the target the sheep wanders to.
     [SerializeField] private Vector3 wanderPos;
@@ -44,7 +48,8 @@ public class Sheep : Animal
     private float stopWanderTimer = 5.0f;
 
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
-    private bool tooClose;
+    private bool tooClose; // For if the sheep is not already fleeing
+    private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
 
     /// <summary>
     /// Make tooClose public;
@@ -52,10 +57,19 @@ public class Sheep : Animal
     /// </summary>
     public bool TooClose
     {
-        get {  return !tooClose; }
+        get {  return tooClose; }
         set { tooClose = value; }
     }
 
+    /// <summary>
+    /// Make inRangeBarkCheck public;
+    /// True if the sheep is fleeing from the sheepdog for being too close, false if not. Used for if the dog has barked.
+    /// </summary>
+    public bool InRangeBarkCheck
+    {
+        get { return inRangeBarkCheck; }
+        set { inRangeBarkCheck = value; }
+    }
 
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -81,6 +95,22 @@ public class Sheep : Animal
     public override void BarkReaction()
     {
         fleeTarget = player;
+        barkCount++;
+
+        // If the player is spamming the bark button, penalize them by making the max bark timer decrease by 2 seconds.
+        if (barkCount >= 5)
+        {
+            barkTimer = maxBarkTimer - 2.0f;
+            timeLowered = true;
+        }
+
+        // If the player is not spamming the bark button, set the bark timer to the max.
+        else
+        {
+            barkTimer = maxBarkTimer;
+            timeLowered = false;
+        }
+
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -143,6 +173,37 @@ public class Sheep : Animal
 
             // If the sheep is fleeing, have the acceleration face away the specific target.
             case SheepState.Flee:
+                // If the sheep is fleeing for the dog barking, have it stop fleeing after a bit.
+                if (barkTimer > 0.0f)
+                {
+                    Debug.Log(barkTimer);
+                    barkTimer -= Time.deltaTime;// * barkCount;
+
+                    // Reset the bark counter if the player is no longer spamming the bark button. 
+                    if ((barkTimer <= maxBarkTimer - 1.0f && !timeLowered) || 
+                        (barkTimer <= maxBarkTimer - 3.0f && timeLowered))
+                    {
+                        barkCount = 0;
+                    }
+
+                    // If the bark timer ends, put the sheep in the still state if the sheep is far enough away from the sheepdog.
+                    if (barkTimer <= 0.0f)
+                    {       
+                        // If the sheep is not far enough away from the sheepdog, have it keep fleeing.
+                        if (inRangeBarkCheck)
+                        {
+                            tooClose = true;
+                        }
+
+                        // If the sheep is far enough away from th sheepdog, have it stop fleeing.
+                        else
+                        {
+                            ToStillState();
+                        }
+
+                        barkCount = 0;
+                    }
+                }
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
                 acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
                 break;
@@ -226,12 +287,16 @@ public class Sheep : Animal
         // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
-            && other.GetType() != typeof(SphereCollider)
-            && currentState != SheepState.Flee)
+            && other.GetType() != typeof(SphereCollider))
         {
-            tooClose = true;
-            fleeTarget = other.gameObject;
-            ToFleeState(fleeTarget.transform.position);
+            inRangeBarkCheck = true;
+            if (currentState != SheepState.Flee)
+            {
+                tooClose = true;
+                fleeTarget = other.gameObject;
+                ToFleeState(fleeTarget.transform.position);
+            }
+            
         }
     }
 
@@ -248,6 +313,7 @@ public class Sheep : Animal
             && tooClose)
         {
             tooClose = false;
+            inRangeBarkCheck = false;
             ToStillState();
         }
     }

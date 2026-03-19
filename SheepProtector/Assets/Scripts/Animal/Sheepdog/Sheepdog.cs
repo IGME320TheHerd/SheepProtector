@@ -18,11 +18,10 @@ public class Sheepdog : Animal
 
     // Checks if the bark button is held down.
     private bool barkHeldDown;
+    [SerializeField] private float maxBarkCooldown = 0.5f;
+    private float barkCooldownTimer = 0.0f;
 
     // The cooldown for herding.
-    private bool herdPressed;
-    private float herdCooldown;
-    private float maxHerdCooldown;
     [SerializeField] private float herdDist = 5.0f;
     [SerializeField] private float herdStrength = 500;
 
@@ -34,11 +33,6 @@ public class Sheepdog : Animal
         // Set up barking.
         barkHeldDown = false;
         barkReactors = new System.Collections.Generic.List<Animal>();
-
-        // Set up herding.
-        herdPressed = false;
-        herdCooldown = 0.0f;
-        maxHerdCooldown = 3.0f;
     }
 
     private void Update()
@@ -53,30 +47,20 @@ public class Sheepdog : Animal
     {
         // Check to see if the player wants to bark.
         bool barkCheck = Input.GetButton("Bark");
+        barkCooldownTimer -= Time.deltaTime;
 
         // When the player presses down the bark button, have all bark actions go off.
-        if (barkCheck && !barkHeldDown)
+        if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
         {
             Bark();
             barkHeldDown = true;
+            barkCooldownTimer = maxBarkCooldown;
         }
 
         // If the player is no longer holding down the bark button, reset the held down checker.
         else if (!barkCheck && barkHeldDown)
         {
             barkHeldDown = false;
-        }
-
-        // If the sheepdog has recently herded, decrease the cooldown so it can herd again.
-        if (herdPressed)
-        {
-            herdCooldown -= Time.deltaTime;
-            
-            // If the herd cooldown is over, allow the sheepdog to herd again.
-            if (herdCooldown <= 0.0f)
-            {
-                herdPressed = false;
-            }
         }
     }
 
@@ -119,6 +103,7 @@ public class Sheepdog : Animal
             if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
             {
                 sheep.TooClose = false;
+                sheep.InRangeBarkCheck = false;
             }
         }
     }
