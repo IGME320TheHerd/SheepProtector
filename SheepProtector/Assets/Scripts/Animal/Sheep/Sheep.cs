@@ -43,10 +43,19 @@ public class Sheep : Animal
     // If the sheep gets this far away from a flee target, it will no longer be fleeing from that target.
     [SerializeField] private float leaveFleeDist = 10.0f;
 
-    private float randomWanderTimer = 6.0f;
+    // How long between rng checks for sheep attempting to wander
+    public float stillTime = 3.0f;
 
-    private float stopWanderTimer = 5.0f;
+    // How long sheep should wander
+    public float wanderLength = 15.0f;
 
+    // How fast sheep goes during wander
+    public float wanderSpeed = 6.0f;
+
+
+    private float randomWanderTimer;
+
+    private float stopWanderTimer;
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
@@ -76,6 +85,8 @@ public class Sheep : Animal
     /// </summary>
     private void Start()
     {
+        randomWanderTimer = stillTime;
+        stopWanderTimer = wanderLength;
         currentState = SheepState.Still;
         tooClose = false;
 
@@ -151,11 +162,12 @@ public class Sheep : Animal
                 {
                     // If the sheep passes a random number check, have it wander to a random nearby point.
                     float rng = Random.Range(0, 100);
-                    if (rng <= 30.0f)
+                    if (rng <= 40.0f)
                     {
                         ToWanderState();
                     }
-                    randomWanderTimer = 6.0f;
+
+                    randomWanderTimer = stillTime;
                 }
                 break;
 
@@ -219,18 +231,21 @@ public class Sheep : Animal
         if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
         {
             acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
+            stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
         {
             acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
+            stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
         {
             acceleration += hit3.normal * wallFleeWeight * ((1 / hit3.distance) / hitdist);
+            stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // Draw the rays with gizmos active to show the direction of the sheep.
@@ -256,8 +271,8 @@ public class Sheep : Animal
     /// </summary>
     private void ToWanderState()
     {
-        maxSpeed = 2.0f;
-        randomWanderTimer = 5.0f;
+        maxSpeed = wanderSpeed;
+        stopWanderTimer = wanderLength;
         currentState = SheepState.Wander;
     }
 
