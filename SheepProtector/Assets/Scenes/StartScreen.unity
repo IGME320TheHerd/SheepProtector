@@ -2010,12 +2010,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   savePath: 
   pauseScreen: {fileID: 1563906032}
+  controlsScreen: {fileID: 0}
   loadScreen: {fileID: 0}
   gameOverScreen: {fileID: 0}
   pauseCanvas: {fileID: 1466829144}
   eventSystemUI: {fileID: 45139489}
   mainMenuScene: Assets/Scenes/MainMenu.unity
-  gameScene: Assets/Scenes/Tutorial.unity
+  gameScene: Assets/Scenes/WholeMap.unity
 --- !u!1 &1466829144
 GameObject:
   m_ObjectHideFlags: 0
