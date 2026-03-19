@@ -6,7 +6,9 @@ public class DogBark : MonoBehaviour
     // References
     [SerializeField] private AudioSource myAudioSource;
     [SerializeField] private AudioResource barkSound;
-    [SerializeField] private ParticleSystem barkVisual;
+    [SerializeField] private SpriteRenderer barkVisual;
+
+    private float barkVisTimer = 0.0f;
 
     // Update is called once per frame
     void Update()
@@ -14,6 +16,15 @@ public class DogBark : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R))
         {
             Bark();
+        }
+
+        if (barkVisTimer > 0.0f)
+        {
+            barkVisual.enabled = true;
+            barkVisTimer -= Time.deltaTime;
+        } else
+        {
+            barkVisual.enabled = false;
         }
     }
 
@@ -29,7 +40,7 @@ public class DogBark : MonoBehaviour
         // Show visual
         if (barkVisual != null)
         {
-            barkVisual.Play();
+            barkVisTimer = 0.5f;
         }
     }
 }

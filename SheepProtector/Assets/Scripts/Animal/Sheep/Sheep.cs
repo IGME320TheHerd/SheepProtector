@@ -52,6 +52,10 @@ public class Sheep : Animal
     // How fast sheep goes during wander
     public float wanderSpeed = 6.0f;
 
+    private bool outOfRange = false;
+
+    private float rangeWaitTimer = 0.0f;
+
 
     private float randomWanderTimer;
 
@@ -105,6 +109,7 @@ public class Sheep : Animal
     /// </summary>
     public override void BarkReaction()
     {
+        Debug.Log("Bark Reaction");
         fleeTarget = player;
         barkCount++;
 
@@ -122,6 +127,7 @@ public class Sheep : Animal
             timeLowered = false;
         }
 
+        maxSpeed = 13f;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -138,12 +144,23 @@ public class Sheep : Animal
         acceleration = Vector3.zero;
         Movement();
 
+        if (rangeWaitTimer > 0.0f)
+        {
+            rangeWaitTimer -= Time.deltaTime;
+        }
+
+        if (outOfRange && rangeWaitTimer <= 0.0f)
+        {
+            ToStillState();
+            outOfRange = false;
+        }
+
         acceleration.y = 0.0f;
     }
 
     public void LeaveBark()
     {
-        ToStillState();
+        rangeWaitTimer = 0.2f;
     }
 
     /// <summary>
@@ -188,7 +205,6 @@ public class Sheep : Animal
                 // If the sheep is fleeing for the dog barking, have it stop fleeing after a bit.
                 if (barkTimer > 0.0f)
                 {
-                    Debug.Log(barkTimer);
                     barkTimer -= Time.deltaTime;// * barkCount;
 
                     // Reset the bark counter if the player is no longer spamming the bark button. 
@@ -261,7 +277,6 @@ public class Sheep : Animal
     /// <param name="targetPos"> The position the sheep should flee from, usually an animal's position. </param>
     private void ToFleeState(Vector3 targetPos)
     {
-        maxSpeed = 7.0f;
         // Change the state of the sheep.
         currentState = SheepState.Flee;
     }
@@ -309,6 +324,7 @@ public class Sheep : Animal
             {
                 tooClose = true;
                 fleeTarget = other.gameObject;
+                maxSpeed = 7f;
                 ToFleeState(fleeTarget.transform.position);
             }
             
