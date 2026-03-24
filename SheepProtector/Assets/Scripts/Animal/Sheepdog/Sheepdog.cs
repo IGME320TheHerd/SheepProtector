@@ -17,13 +17,20 @@ public class Sheepdog : Animal
     }
 
     // Checks if the bark button is held down.
-    bool barkHeldDown;
+    private bool barkHeldDown;
+    [SerializeField] private float maxBarkCooldown = 0.5f;
+    private float barkCooldownTimer = 0.0f;
+
+    // The cooldown for herding.
+    [SerializeField] private float herdDist = 5.0f;
+    [SerializeField] private float herdStrength = 500;
 
     /// <summary>
     /// Start is called once before the first execution of Update after the MonoBehaviour is created
     /// </summary>
     private void Start()
     {
+        // Set up barking.
         barkHeldDown = false;
         barkReactors = new System.Collections.Generic.List<Animal>();
     }
@@ -40,12 +47,14 @@ public class Sheepdog : Animal
     {
         // Check to see if the player wants to bark.
         bool barkCheck = Input.GetButton("Bark");
+        barkCooldownTimer -= Time.deltaTime;
 
         // When the player presses down the bark button, have all bark actions go off.
-        if (barkCheck && !barkHeldDown)
+        if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
         {
             Bark();
             barkHeldDown = true;
+            barkCooldownTimer = maxBarkCooldown;
         }
 
         // If the player is no longer holding down the bark button, reset the held down checker.
@@ -83,11 +92,22 @@ public class Sheepdog : Animal
     /// What should happen when the player uses the bark button.
     /// </summary>
     /// <param name="callBackContext"></param>
-    public void Bark()
+    private void Bark()
     {
         for (int i = 0; i < barkReactors.Count; i++)
         {
-            barkReactors[i].BarkReaction();
+            if (barkReactors[i] != null)
+            {
+                barkReactors[i].BarkReaction();
+
+                // If the bark reactor is the sheep, tell the sheep that
+                // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+                {
+                    sheep.TooClose = false;
+                    //sheep.InRangeBarkCheck = false;
+                }
+            }
         }
     }
 
@@ -103,10 +123,10 @@ public class Sheepdog : Animal
     /// How the sheepdog should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    private void OnCollisionEnter(Collision other)
-    {
-
-    }
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //
+    //}
 
     /// <summary>
     /// How the sheepdog should react upon an enter trigger going off.
@@ -114,10 +134,10 @@ public class Sheepdog : Animal
     /// <param name="other"> The other game object's collider. </param>
     public void OnTriggerEnter(Collider other)
     {
-        // If the trigger is an animalk, add if to the dog's list of bark reactions if it is not already there.
-        if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
+        // If the trigger is an animal, add if to the dog's list of bark reactions if it is not already there.
+        if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal)) 
         {
-            if (!barkReactors.Contains(otherAnimal))
+            if (!barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
                 barkReactors.Add(otherAnimal);
             }
@@ -133,13 +153,19 @@ public class Sheepdog : Animal
         // If the other object is an animal, remove it from the dog's list of bark reactions
         if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
         {
-            if (barkReactors.Contains(otherAnimal))
+            // Check to see if the other is the sheep and if it is the sheep, check to see if it is the sheep's sphere trigger.
+            bool sheep = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep);
+
+            // Remove the other animal to from the list of bark reactors if it is not the sheep.
+            if (!sheep && barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
                 barkReactors.Remove(otherAnimal);
             }
 
-            if (other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep))
+            // If the other animal is the sheep, remove it from barkReactors if it is not the sheep's sphere trigger.
+            else if (sheep && !other.isTrigger)
             {
+                barkReactors.Remove(otherAnimal);
                 otherSheep.LeaveBark();
             }
         }
