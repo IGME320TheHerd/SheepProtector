@@ -48,7 +48,7 @@ public class Sheepdog : Animal
         // Check to see if the player wants to bark.
         bool barkCheck = Input.GetButton("Bark");
         barkCooldownTimer -= Time.deltaTime;
-        Debug.Log(barkReactors.Count);
+        //Debug.Log(barkReactors.Count);
 
         // When the player presses down the bark button, have all bark actions go off.
         if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
@@ -139,9 +139,9 @@ public class Sheepdog : Animal
         if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal)) 
         {
             bool sheepClose = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep) 
-                && other.GetType() != typeof(SphereCollider);
-            Debug.Log("Entered");
-            if (!barkReactors.Contains(otherAnimal) && !sheepClose)
+                && !other.isTrigger;
+            Debug.Log("Entered: " + sheepClose);
+            if (!barkReactors.Contains(otherAnimal) && sheepClose)
             {
                 Debug.Log("Added");
                 barkReactors.Add(otherAnimal);
@@ -184,7 +184,6 @@ public class Sheepdog : Animal
             Debug.Log("Start Exit");
             // Check to see if the other is the sheep and if it is the sheep, check to see if it is the sheep's sphere trigger.
             bool sheep = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep);
-            bool sheepSphere = other.GetType() == typeof(SphereCollider);
 
             // Remove the other animal to from the list of bark reactors if it is not the sheep.
             if (!sheep && barkReactors.Contains(otherAnimal))
@@ -193,7 +192,7 @@ public class Sheepdog : Animal
             }
 
             // If the other animal is the sheep, remove it from barkReactors if it is not the sheep's sphere trigger.
-            else if (sheep && !sheepSphere)
+            else if (sheep && !other.isTrigger)
             {
                 Debug.Log("Exited Fully");
                 barkReactors.Remove(otherAnimal);
