@@ -48,7 +48,6 @@ public class Sheepdog : Animal
         // Check to see if the player wants to bark.
         bool barkCheck = Input.GetButton("Bark");
         barkCooldownTimer -= Time.deltaTime;
-        //Debug.Log(barkReactors.Count);
 
         // When the player presses down the bark button, have all bark actions go off.
         if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
@@ -124,10 +123,10 @@ public class Sheepdog : Animal
     /// How the sheepdog should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    private void OnCollisionEnter(Collision other)
-    {
-
-    }
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //
+    //}
 
     /// <summary>
     /// How the sheepdog should react upon an enter trigger going off.
@@ -138,39 +137,12 @@ public class Sheepdog : Animal
         // If the trigger is an animal, add if to the dog's list of bark reactions if it is not already there.
         if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal)) 
         {
-            bool sheepClose = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep) 
-                && !other.isTrigger;
-            Debug.Log("Entered: " + sheepClose);
-            if (!barkReactors.Contains(otherAnimal) && sheepClose)
+            if (!barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
-                Debug.Log("Added");
                 barkReactors.Add(otherAnimal);
             }
         }
     }
-
-    /// <summary>
-    /// This exists because sometimes the sheepdog is able to properly trigger an exit collision
-    /// without the other animal fully leaving the sphere, causing on trigger enter to never go off.
-    /// 
-    /// </summary>
-    /// <param name="other"></param>
-    //public void OnTriggerStay(Collider other)
-    //{
-    //    // If the trigger is an animal, add if to the dog's list of bark reactions if it is not already there.
-    //    if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal)
-    //        && Vector3.Distance(transform.position, other.gameObject.transform.position))
-    //    {
-    //        bool sheepClose = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep)
-    //            && other.GetType() != typeof(SphereCollider);
-    //        Debug.Log("Entered");
-    //        if (!barkReactors.Contains(otherAnimal) && !sheepClose)
-    //        {
-    //            Debug.Log("Added");
-    //            barkReactors.Add(otherAnimal);
-    //        }
-    //    }
-    //}
 
     /// <summary>
     /// How the sheepdog should react upon hitting an exit trigger going off.
@@ -181,12 +153,11 @@ public class Sheepdog : Animal
         // If the other object is an animal, remove it from the dog's list of bark reactions
         if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
         {
-            Debug.Log("Start Exit");
             // Check to see if the other is the sheep and if it is the sheep, check to see if it is the sheep's sphere trigger.
             bool sheep = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep);
 
             // Remove the other animal to from the list of bark reactors if it is not the sheep.
-            if (!sheep && barkReactors.Contains(otherAnimal))
+            if (!sheep && barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
                 barkReactors.Remove(otherAnimal);
             }
@@ -194,7 +165,6 @@ public class Sheepdog : Animal
             // If the other animal is the sheep, remove it from barkReactors if it is not the sheep's sphere trigger.
             else if (sheep && !other.isTrigger)
             {
-                Debug.Log("Exited Fully");
                 barkReactors.Remove(otherAnimal);
                 otherSheep.LeaveBark();
             }

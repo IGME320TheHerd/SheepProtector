@@ -175,7 +175,7 @@ public class Sheep : Animal
         {
             // If the sheep is in the still state, have it wander at random.
             case SheepState.Still:
-                //randomWanderTimer -= Time.deltaTime;
+                randomWanderTimer -= Time.deltaTime;
 
                 // If the random wander timer reaches 0, check to see if the sheep should wander.
                 if (randomWanderTimer <= 0.0f)
