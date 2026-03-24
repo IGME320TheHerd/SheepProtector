@@ -19,10 +19,12 @@ public class Billboarding : MonoBehaviour
         if (isShadow)
         {
             transform.forward = Vector3.Scale(target.forward, new Vector3(1, 0, 1));
+            
         }
         else
         {
             transform.forward = target.forward;
+            transform.position = Vector3.MoveTowards(transform.parent.position, target.position, 1.0f);
         }
     }
 }
