@@ -139,7 +139,6 @@ public class Sheepdog : Animal
         {
             if (!barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
-                Debug.Log("Addded");
                 barkReactors.Add(otherAnimal);
             }
         }
