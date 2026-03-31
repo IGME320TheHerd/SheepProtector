@@ -63,6 +63,8 @@ public class Sheep : Animal
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
+    private float closeTimer;
+    [SerializeField]private float maxCloseTimer = 5.0f;
 
     /// <summary>
     /// Make tooClose public;
@@ -91,6 +93,7 @@ public class Sheep : Animal
     {
         randomWanderTimer = stillTime;
         stopWanderTimer = wanderLength;
+        closeTimer = 0;
         currentState = SheepState.Still;
         tooClose = false;
 
@@ -224,9 +227,9 @@ public class Sheep : Animal
                         if (inRangeBarkCheck)
                         {
                             tooClose = true;
+                            closeTimer = maxCloseTimer;
                         }
-
-                        // If the sheep is far enough away from th sheepdog, have it stop fleeing.
+                        // If the sheep is far enough away from the sheepdog, have it stop fleeing.
                         else
                         {
                             ToStillState();
@@ -234,6 +237,17 @@ public class Sheep : Animal
 
                         barkCount = 0;
                     }
+                }
+
+                // If the sheep has not flee'd away from the dog for enough time for being too close, have it keep fleeing.
+                else if (closeTimer > 0.0f && !tooClose)
+                {
+                    closeTimer -= Time.deltaTime;
+                    if (closeTimer <= 0.0f)
+                    {
+                        ToStillState();
+                    }
+
                 }
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
                 acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
@@ -323,11 +337,12 @@ public class Sheep : Animal
             && other.GetType() != typeof(SphereCollider))
         {
             inRangeBarkCheck = true;
-            if (currentState != SheepState.Flee)
+            if (currentState != SheepState.Flee || closeTimer > 0)
             {
                 tooClose = true;
                 fleeTarget = other.gameObject;
                 maxSpeed = 7f;
+                closeTimer = maxCloseTimer;
                 ToFleeState(fleeTarget.transform.position);
             }
             
@@ -346,9 +361,9 @@ public class Sheep : Animal
             && other.GetType() != typeof(SphereCollider)
             && inRangeBarkCheck)
         {
-            if (inRangeBarkCheck && tooClose)
+            if (inRangeBarkCheck && !tooClose)
             {
-                ToStillState();
+                closeTimer = 0;
             }
             tooClose = false;
             inRangeBarkCheck = false;
