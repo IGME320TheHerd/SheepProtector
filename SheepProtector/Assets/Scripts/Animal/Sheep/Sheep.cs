@@ -52,14 +52,12 @@ public class Sheep : Animal
     // How fast sheep goes during wander
     public float wanderSpeed = 6.0f;
 
-    private bool outOfRange = false;
+    private float randomWanderTimer;
+    private float stopWanderTimer;
 
+    private bool outOfRange = false;
     private float rangeWaitTimer = 0.0f;
 
-
-    private float randomWanderTimer;
-
-    private float stopWanderTimer;
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
@@ -247,21 +245,23 @@ public class Sheep : Animal
         float hitdist = 5.0f;
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
+        if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist, 0, QueryTriggerInteraction.Ignore))
         {
             acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
+        if (Physics.Raycast(transform.position, 
+            Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist, 0, QueryTriggerInteraction.Ignore))
         {
             acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
+        if (Physics.Raycast(transform.position, 
+            Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist, 0, QueryTriggerInteraction.Ignore))
         {
             acceleration += hit3.normal * wallFleeWeight * ((1 / hit3.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
@@ -320,7 +320,7 @@ public class Sheep : Animal
         // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
-            && other.GetType() != typeof(SphereCollider))
+            && !other.isTrigger)
         {
             inRangeBarkCheck = true;
             if (currentState != SheepState.Flee)
@@ -343,7 +343,7 @@ public class Sheep : Animal
         // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
-            && other.GetType() != typeof(SphereCollider)
+            && !other.isTrigger
             && inRangeBarkCheck)
         {
             if (inRangeBarkCheck && tooClose)
