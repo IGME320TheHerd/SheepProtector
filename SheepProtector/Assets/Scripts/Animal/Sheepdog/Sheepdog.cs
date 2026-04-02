@@ -1,11 +1,16 @@
 using NUnit.Framework;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Sheepdog : Animal
 {
+    [SerializeField] private AudioSource myAudioSource;
+    [SerializeField] private AudioResource barkSound;
+    [SerializeField] private SpriteRenderer barkVisual;
     // A list of all of the different animals that should react to bark.
     private System.Collections.Generic.List<Animal> barkReactors;
+    private float barkVisTimer = 0.0f;
 
     /// <summary>
     /// Making barkReactors public so other things can add themselves to it.
@@ -37,14 +42,6 @@ public class Sheepdog : Animal
 
     private void Update()
     {
-        
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    private void FixedUpdate()
-    {
         // Check to see if the player wants to bark.
         bool barkCheck = Input.GetButton("Bark");
         barkCooldownTimer -= Time.deltaTime;
@@ -62,6 +59,24 @@ public class Sheepdog : Animal
         {
             barkHeldDown = false;
         }
+
+        if (barkVisTimer > 0.0f)
+        {
+            barkVisual.enabled = true;
+            barkVisTimer -= Time.deltaTime;
+        }
+        else
+        {
+            barkVisual.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    private void FixedUpdate()
+    {
+
     }
 
     /// <summary>
@@ -94,6 +109,19 @@ public class Sheepdog : Animal
     /// <param name="callBackContext"></param>
     private void Bark()
     {
+        // Play sound 
+        if (myAudioSource != null && barkSound != null)
+        {
+            myAudioSource.resource = barkSound;
+            myAudioSource.Play();
+        }
+
+        // Show visual
+        if (barkVisual != null)
+        {
+            barkVisTimer = 0.5f;
+        }
+
         for (int i = 0; i < barkReactors.Count; i++)
         {
             if (barkReactors[i] != null)
