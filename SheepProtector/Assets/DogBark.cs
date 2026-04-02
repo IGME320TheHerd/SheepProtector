@@ -13,7 +13,7 @@ public class DogBark : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton("Bark"))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             Bark();
         }
