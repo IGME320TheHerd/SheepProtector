@@ -6,7 +6,7 @@ public class Billboarding : MonoBehaviour
     bool isShadow;
 
     [SerializeField]
-    bool lockY; // makes trees only roatate left and right 
+    bool lockY; // makes trees only rotate left and right 
 
     [SerializeField]
     Transform target; // used for camera attachment 
