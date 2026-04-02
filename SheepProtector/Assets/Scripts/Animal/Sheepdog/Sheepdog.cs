@@ -96,14 +96,17 @@ public class Sheepdog : Animal
     {
         for (int i = 0; i < barkReactors.Count; i++)
         {
-            barkReactors[i].BarkReaction();
-
-            // If the bark reactor is the sheep, tell the sheep that
-            // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
-            if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+            if (barkReactors[i] != null)
             {
-                sheep.TooClose = false;
-                sheep.InRangeBarkCheck = false;
+                barkReactors[i].BarkReaction();
+
+                // If the bark reactor is the sheep, tell the sheep that
+                // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+                {
+                    sheep.TooClose = false;
+                    //sheep.InRangeBarkCheck = false;
+                }
             }
         }
     }
@@ -120,10 +123,10 @@ public class Sheepdog : Animal
     /// How the sheepdog should react upon a collision.
     /// </summary>
     /// <param name="other"> The other game object in the collision. </param>
-    private void OnCollisionEnter(Collision other)
-    {
-
-    }
+    //private void OnCollisionEnter(Collision other)
+    //{
+    //
+    //}
 
     /// <summary>
     /// How the sheepdog should react upon an enter trigger going off.
@@ -134,9 +137,7 @@ public class Sheepdog : Animal
         // If the trigger is an animal, add if to the dog's list of bark reactions if it is not already there.
         if (other.gameObject.TryGetComponent<Animal>(out Animal otherAnimal)) 
         {
-            bool sheepClose = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep) 
-                && other.GetType() != typeof(SphereCollider);
-            if (!barkReactors.Contains(otherAnimal) && !sheepClose)
+            if (!barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
                 barkReactors.Add(otherAnimal);
             }
@@ -154,16 +155,15 @@ public class Sheepdog : Animal
         {
             // Check to see if the other is the sheep and if it is the sheep, check to see if it is the sheep's sphere trigger.
             bool sheep = other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep);
-            bool sheepSphere = other.GetType() == typeof(SphereCollider);
 
             // Remove the other animal to from the list of bark reactors if it is not the sheep.
-            if (!sheep && barkReactors.Contains(otherAnimal))
+            if (!sheep && barkReactors.Contains(otherAnimal) && !other.isTrigger)
             {
                 barkReactors.Remove(otherAnimal);
             }
 
             // If the other animal is the sheep, remove it from barkReactors if it is not the sheep's sphere trigger.
-            else if (sheep && !sheepSphere)
+            else if (sheep && !other.isTrigger)
             {
                 barkReactors.Remove(otherAnimal);
                 otherSheep.LeaveBark();

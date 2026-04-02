@@ -109,7 +109,6 @@ public class Sheep : Animal
     /// </summary>
     public override void BarkReaction()
     {
-        Debug.Log("Bark Reaction");
         fleeTarget = player;
         barkCount++;
 
@@ -158,9 +157,13 @@ public class Sheep : Animal
         acceleration.y = 0.0f;
     }
 
+    /// <summary>
+    /// If the sheep gets out of the sheepdog's bark range, have a small countdown go off, then set the sheep to the still state.
+    /// </summary>
     public void LeaveBark()
     {
         rangeWaitTimer = 0.2f;
+        outOfRange = true;
     }
 
     /// <summary>
@@ -341,11 +344,14 @@ public class Sheep : Animal
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
             && other.GetType() != typeof(SphereCollider)
-            && tooClose)
+            && inRangeBarkCheck)
         {
+            if (inRangeBarkCheck && tooClose)
+            {
+                ToStillState();
+            }
             tooClose = false;
             inRangeBarkCheck = false;
-            ToStillState();
         }
     }
 
