@@ -20,8 +20,8 @@ public class NewBehaviourScript : MonoBehaviour
     {
         transform.position = target.position; // snaps pivot to player position
 
-        if (Input.GetKeyDown(KeyCode.Q)) targetYRotation -= 45f; // rotates left 45 degrees on q press
-        if (Input.GetKeyDown(KeyCode.E)) targetYRotation += 45f; // rotates 45 degrees right on e press
+        if (Input.GetKeyDown(KeyCode.LeftArrow)) targetYRotation -= 45f; // rotates left 45 degrees on q press
+        if (Input.GetKeyDown(KeyCode.RightArrow)) targetYRotation += 45f; // rotates 45 degrees right on e press
 
       
         Quaternion targetRotation = Quaternion.Euler(0, targetYRotation, 0); // creates quaternion value using y axis, left or right
