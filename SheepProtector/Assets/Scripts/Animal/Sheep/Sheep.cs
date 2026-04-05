@@ -133,7 +133,17 @@ public class Sheep : Animal
     /// </summary>
     public override void Die()
     {
+        // Get the game manager
+        GameManager gameOverCaller = GameObject.FindAnyObjectByType<GameManager>();
 
+        // If a game manager was not found, create a new one.
+        if (gameOverCaller == null)
+        {
+            gameOverCaller = new GameManager();
+        }
+
+        // Set the state of the game over manager to the game over state.
+        gameOverCaller.SetState(4);
     }
 
     private void Update()

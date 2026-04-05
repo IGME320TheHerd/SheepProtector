@@ -1043,6 +1043,34 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Sheepdog",
+            "id": "d09a30b5-27c0-49a2-8d48-26e9ba3f0d59",
+            "actions": [
+                {
+                    "name": "Bark",
+                    "type": "Button",
+                    "id": "423de79f-0d23-4d9e-baaf-92d941221b1c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7ba8784f-d3ca-48a0-a637-06073470112f",
+                    "path": "<Keyboard>/space",
+                    "interactions": "Press",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Bark",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": [

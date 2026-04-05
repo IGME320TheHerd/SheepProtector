@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Sheepdog : Animal
 {
@@ -45,22 +46,10 @@ public class Sheepdog : Animal
     /// </summary>
     private void FixedUpdate()
     {
-        // Check to see if the player wants to bark.
-        bool barkCheck = Input.GetButton("Bark");
-        barkCooldownTimer -= Time.deltaTime;
-
-        // When the player presses down the bark button, have all bark actions go off.
-        if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
+        // Decrease the bark cooldown.       
+        if (barkCooldownTimer > -99.0f)
         {
-            Bark();
-            barkHeldDown = true;
-            barkCooldownTimer = maxBarkCooldown;
-        }
-
-        // If the player is no longer holding down the bark button, reset the held down checker.
-        else if (!barkCheck && barkHeldDown)
-        {
-            barkHeldDown = false;
+            barkCooldownTimer -= Time.deltaTime;
         }
     }
 
@@ -77,7 +66,17 @@ public class Sheepdog : Animal
     /// </summary>
     public override void Die()
     {
-        
+        // Get the game manager
+        GameManager gameOverCaller = GameObject.FindAnyObjectByType<GameManager>();
+
+        // If a game manager was not found, create a new one.
+        if (gameOverCaller == null)
+        {
+            gameOverCaller = new GameManager();
+        }
+
+        // Set the state of the game over manager to the game over state.
+        gameOverCaller.SetState(4);
     }
 
     /// <summary>
@@ -91,21 +90,29 @@ public class Sheepdog : Animal
     /// <summary>
     /// What should happen when the player uses the bark button.
     /// </summary>
-    /// <param name="callBackContext"></param>
-    private void Bark()
+    /// <param name="context"> The input button pressed to call this function. </param>
+    public void Bark(InputAction.CallbackContext context)
     {
-        for (int i = 0; i < barkReactors.Count; i++)
+        // When the player presses down the bark button, make sure bark is off cooldown before activating again.
+        if (!barkHeldDown && barkCooldownTimer <= 0.0f)
         {
-            if (barkReactors[i] != null)
-            {
-                barkReactors[i].BarkReaction();
+            barkHeldDown = true;
+            barkCooldownTimer = maxBarkCooldown;
 
-                // If the bark reactor is the sheep, tell the sheep that
-                // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
-                if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+            // Have all of the bark reactions go off.
+            for (int i = 0; i < barkReactors.Count; i++)
+            {
+                if (barkReactors[i] != null)
                 {
-                    sheep.TooClose = false;
-                    //sheep.InRangeBarkCheck = false;
+                    barkReactors[i].BarkReaction();
+
+                    // If the bark reactor is the sheep, tell the sheep that
+                    // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                    if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+                    {
+                        sheep.TooClose = false;
+                        //sheep.InRangeBarkCheck = false;
+                    }
                 }
             }
         }
