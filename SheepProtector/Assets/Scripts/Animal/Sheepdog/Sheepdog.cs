@@ -79,14 +79,6 @@ public class Sheepdog : Animal
     }
 
     /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    private void FixedUpdate()
-    {
-
-    }
-
-    /// <summary>
     /// Required for compiling purposes, since the dog is the one barking, the dog does not need to react to it.
     /// </summary>
     public override void BarkReaction()
