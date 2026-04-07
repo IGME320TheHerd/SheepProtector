@@ -51,6 +51,8 @@ public class Enemy : Animal
 
     // The starting position of the enemy.
     private Vector3 home;
+    private float maxHomeDist; // How far the enemy can be from its home before it stops chasing.
+    private bool goHome = false;
 
     // What type the enemy is.
     [SerializeField] private EnemyType type;
@@ -93,6 +95,7 @@ public class Enemy : Animal
                 stunCooldownTime = 3.0f;
                 slowCooldownTime = 3.0f;
                 wanderSpeed = 6.0f;
+                maxHomeDist = 60.0f;
                 break;
 
             // Set all of the specific bear variables.
@@ -106,6 +109,7 @@ public class Enemy : Animal
                 maxChasePlayerTime = 1.3f;
                 slowDist = 5.0f;
                 wanderSpeed = 5.0f;
+                maxHomeDist = 55.0f;
                 break;
         }
 
@@ -135,6 +139,25 @@ public class Enemy : Animal
 
         // Make sure that the enemy is not moving upwards.
         acceleration.y = 0.0f;
+
+        float distance = Vector3.Distance(transform.position, home);
+
+        bool distCheck = Vector3.Distance(transform.position, home) <= 4.0f;
+
+        // Check to see if the enemy has moved too far away from its home.
+        if (chasing && Vector3.Distance(transform.position, home) > maxHomeDist)
+        {
+            // If the enemy has moved too far from its home, have it move back.
+            goHome = true;
+        }
+
+        // If the enemy has made it back to its home, have it stop and go back to the still state of the enemy.
+        else if (goHome && distCheck)
+        {
+            goHome = false;
+            velocity = Vector3.zero;
+            acceleration = Vector3.zero;
+        }
     }
 
     /// <summary>
@@ -225,11 +248,7 @@ public class Enemy : Animal
     protected override void Movement()
     {
         // If the enemy is stunned from a bark, don't have it move.
-        if (stunTimer > 0.0f)
-        {
-            stunTimer -= Time.deltaTime;
-        }
-        else if (stunTimer >= -1 * stunCooldownTime)
+        if (stunTimer >= -1 * stunCooldownTime)
         {
             stunTimer -= Time.deltaTime;
         }
@@ -268,17 +287,18 @@ public class Enemy : Animal
             }
         }
 
-        // If the enemy is starting to get ready to chase, have the timer go down until the chase starts.
+        // If the enemy is getting ready to stop chasing, have the timer go down until the chase starts.
         else if (readyEnd)
         {
             endTimer -= Time.deltaTime;
 
-            // If the timer reaches 0, have the enemy stop chasing.
-            if (endTimer <= 0.0f)
+            // If the timer reaches 0 or the enemy is on its way back to its home, have the enemy stop chasing.
+            if (endTimer <= 0.0f || goHome)
             {
                 readyEnd = false;
                 chasing = false;
                 chaseTarget = null;
+                endTimer = -1.0f;
             }
         }
 
@@ -321,8 +341,14 @@ public class Enemy : Animal
             }
         }
 
+        // If the eenmy has gone too far from its home, have it go back.
+        if (goHome)
+        {
+            acceleration += Seek(home);
+        }
+
         // If the enemy is not chasing something, have it wander around its home area.
-        if (wandering && wallCast)
+        else if (wandering && wallCast)
         {
             wanderTimer -= Time.deltaTime;
 
@@ -472,7 +498,7 @@ public class Enemy : Animal
         // If the trigger is the sheep, have the enemy get ready to chase it.
         if (other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep) && !other.isTrigger)
         {
-            // Move the chekcs to movement because C# and Unity don't like raycasts in OnTriggerEnter.
+            // Move the checks to movement because C# and Unity don't like raycasts in OnTriggerEnter.
             chaseTarget = other.gameObject;
             startFinding = true;
         }
