@@ -2,11 +2,16 @@ using NUnit.Framework;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Audio;
 
 public class Sheepdog : Animal
 {
+    [SerializeField] private AudioSource myAudioSource;
+    [SerializeField] private AudioResource barkSound;
+    [SerializeField] private SpriteRenderer barkVisual;
     // A list of all of the different animals that should react to bark.
     private System.Collections.Generic.List<Animal> barkReactors;
+    private float barkVisTimer = 0.0f;
 
     /// <summary>
     /// Making barkReactors public so other things can add themselves to it.
@@ -61,6 +66,24 @@ public class Sheepdog : Animal
         {
             barkHeldDown = false;
         }
+
+        if (barkVisTimer > 0.0f)
+        {
+            barkVisual.enabled = true;
+            barkVisTimer -= Time.deltaTime;
+        }
+        else
+        {
+            barkVisual.enabled = false;
+        }
+    }
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    private void FixedUpdate()
+    {
+
     }
 
     /// <summary>
@@ -109,22 +132,33 @@ public class Sheepdog : Animal
         {
             barkHeldDown = true; // TODO: REMOVE THIS WHEN INPUT GETS UPDATED
             barkCooldownTimer = maxBarkCooldown;
-    
-            // Have all of the bark reactions go off.
-            for (int i = 0; i < barkReactors.Count; i++)
+        // Play sound 
+        if (myAudioSource != null && barkSound != null)
+        {
+            myAudioSource.resource = barkSound;
+            myAudioSource.Play();
+        }
+
+        // Show visual
+        if (barkVisual != null)
+        {
+            barkVisTimer = 0.5f;
+        }
+
+        for (int i = 0; i < barkReactors.Count; i++)
+        {
+            if (barkReactors[i] != null)
             {
-                if (barkReactors[i] != null)
+                barkReactors[i].BarkReaction();
+
+                // If the bark reactor is the sheep, tell the sheep that
+                // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
                 {
-                    barkReactors[i].BarkReaction();
-    
-                    // If the bark reactor is the sheep, tell the sheep that
-                    // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
-                    if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
-                    {
-                        sheep.TooClose = false;
-                    }
+                    sheep.TooClose = false;
                 }
             }
+        }
         }
     }
 

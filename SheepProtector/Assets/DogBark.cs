@@ -13,7 +13,7 @@ public class DogBark : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             Bark();
         }
@@ -30,17 +30,6 @@ public class DogBark : MonoBehaviour
 
     private void Bark()
     {
-        // Play sound 
-        if (myAudioSource != null && barkSound != null)
-        {
-            myAudioSource.resource = barkSound;
-            myAudioSource.Play();
-        }
-
-        // Show visual
-        if (barkVisual != null)
-        {
-            barkVisTimer = 0.5f;
-        }
+        
     }
 }
