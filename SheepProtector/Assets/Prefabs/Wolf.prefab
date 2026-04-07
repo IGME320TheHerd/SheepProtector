@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 7739756278735537094}
   - component: {fileID: 4145486465633684081}
   - component: {fileID: 3884203222210897274}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Wolf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 6
+  m_Radius: 40
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3884203222210897274
 MonoBehaviour:
@@ -224,3 +224,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rBody: {fileID: 7739756278735537094}
   maxSpeed: 9
+  type: 0
+  player: {fileID: 0}
+  dogMask:
+    serializedVersion: 2
+    m_Bits: 128
+  wallMask:
+    serializedVersion: 2
+    m_Bits: 1

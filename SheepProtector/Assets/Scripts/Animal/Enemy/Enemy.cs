@@ -140,10 +140,6 @@ public class Enemy : Animal
         // Make sure that the enemy is not moving upwards.
         acceleration.y = 0.0f;
 
-        float distance = Vector3.Distance(transform.position, home);
-
-        bool distCheck = Vector3.Distance(transform.position, home) <= 4.0f;
-
         // Check to see if the enemy has moved too far away from its home.
         if (chasing && Vector3.Distance(transform.position, home) > maxHomeDist)
         {
@@ -152,7 +148,7 @@ public class Enemy : Animal
         }
 
         // If the enemy has made it back to its home, have it stop and go back to the still state of the enemy.
-        else if (goHome && distCheck)
+        else if (goHome && Vector3.Distance(transform.position, home) <= 7.0)
         {
             goHome = false;
             velocity = Vector3.zero;
@@ -295,6 +291,7 @@ public class Enemy : Animal
             // If the timer reaches 0 or the enemy is on its way back to its home, have the enemy stop chasing.
             if (endTimer <= 0.0f || goHome)
             {
+                goHome = true;
                 readyEnd = false;
                 chasing = false;
                 chaseTarget = null;
