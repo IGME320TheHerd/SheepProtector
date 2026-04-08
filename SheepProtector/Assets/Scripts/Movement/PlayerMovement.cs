@@ -14,15 +14,19 @@ public class movement : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float usageRate = 15f;
     [SerializeField] private float regenRate = 10f;
+    [SerializeField] private GameObject barkSprite;
 
     private Rigidbody rb; // reference for player 
     private Vector3 movementDirection; // reference to store movement direction
     private float currentStamina; //gets current stamina
     private float currentSpeed; // tracks current speed
+    private SpriteRenderer sr;
+    private Vector3 currentDir;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // attaches rigid body
+        sr = GetComponentInChildren<SpriteRenderer>();
         currentStamina = maxStamina; // start with max stamina
     }
 
@@ -31,6 +35,22 @@ public class movement : MonoBehaviour
         // uses WASD for movement
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        float angle = Vector3.SignedAngle(currentDir, camForward, Vector3.up);
+
+        if (angle > 5 && angle < 175)
+        {
+            sr.flipX = true;
+            barkSprite.transform.localPosition = new Vector3(-5.5f, 1.83f, 0.0f);
+            barkSprite.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (angle < -5 && angle > -175)
+        {
+            sr.flipX = false;
+            barkSprite.transform.localPosition = new Vector3(5.5f, 1.83f, 0.0f);
+            barkSprite.GetComponent<SpriteRenderer>().flipX = false;
+        }
 
         bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
         bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
@@ -54,7 +74,13 @@ public class movement : MonoBehaviour
         forward.Normalize(); 
         right.Normalize();
 
+
         movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
+
+        if (isMoving)
+        {
+            currentDir = movementDirection;
+        }
 
         HandleStamina(isSprinting); // use stamina function
     }
