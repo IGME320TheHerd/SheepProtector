@@ -17,6 +17,7 @@ public class movement : MonoBehaviour
     [SerializeField] private GameObject barkSprite;
 
     private Rigidbody rb; // reference for player 
+    private Animator animator;
     private Vector3 movementDirection; // reference to store movement direction
     private float currentStamina; //gets current stamina
     private float currentSpeed; // tracks current speed
@@ -27,6 +28,7 @@ public class movement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>(); // attaches rigid body
         sr = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponentInChildren<Animator>();
         currentStamina = maxStamina; // start with max stamina
     }
 
@@ -77,9 +79,12 @@ public class movement : MonoBehaviour
 
         movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
 
+        animator.SetBool("isMoving", isMoving);
+
         if (isMoving)
         {
             currentDir = movementDirection;
+            
         }
 
         HandleStamina(isSprinting); // use stamina function
