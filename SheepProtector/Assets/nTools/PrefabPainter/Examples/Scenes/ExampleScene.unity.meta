@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d4dfbbc076c04427ebff3afb4acd1dce
+timeCreated: 1461241340
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Scenes/ExampleScene.unity
+  uploadId: 653896

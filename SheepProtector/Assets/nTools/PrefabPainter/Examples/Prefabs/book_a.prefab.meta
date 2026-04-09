@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 80bd617a1597f4350b98c07b85d60a05
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/book_a.prefab
+  uploadId: 653896

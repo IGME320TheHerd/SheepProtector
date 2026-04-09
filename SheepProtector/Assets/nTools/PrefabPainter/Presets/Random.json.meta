@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 5cc8c8af0470e463ab5baf562f07ff5a
+timeCreated: 1578655324
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Presets/Random.json
+  uploadId: 653896
