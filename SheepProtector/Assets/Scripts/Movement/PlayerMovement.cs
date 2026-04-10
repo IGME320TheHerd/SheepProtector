@@ -1,10 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class movement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10f; // movement speed
     [SerializeField] private float sprint = 15f; // sprint speed
@@ -26,38 +26,54 @@ public class movement : MonoBehaviour
         currentStamina = maxStamina; // start with max stamina
     }
 
-    void Update()
+    public void OnMove(InputAction.CallbackContext ctx)
     {
-        // uses WASD for movement
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
-        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
-
-        if (isSprinting) // if sprinting
-        {
-            currentSpeed = sprint; // use sprint speed
-        }
-        else
-        {
-            currentSpeed = moveSpeed; // else use reg speed
-        }
-
-        Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
-        Vector3 right = camTransform.right; // right direction from camera
-
-        forward.y = 0; // sets vertivcal direction so players doesnt fly
-        right.y = 0; // sets vert dir to keep movement on x and z
-        
-        // normalize movement to keep constant
-        forward.Normalize(); 
-        right.Normalize();
-
-        movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
-
-        HandleStamina(isSprinting); // use stamina function
+        movementDirection = ctx.ReadValue<Vector2>();
+        currentSpeed = moveSpeed;
+        //Debug.Log(movementDirection);
     }
+
+    public void OnSprint(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            Debug.Log("Sprinting!");
+            currentSpeed = sprint;
+        }
+    }
+
+    //void Update()
+    //{
+    //    // uses WASD for movement
+    //    float h = Input.GetAxisRaw("Horizontal");
+    //    float v = Input.GetAxisRaw("Vertical");
+
+    //    bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
+    //    bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
+
+    //    if (isSprinting) // if sprinting
+    //    {
+    //        currentSpeed = sprint; // use sprint speed
+    //    }
+    //    else
+    //    {
+    //        currentSpeed = moveSpeed; // else use reg speed
+    //    }
+
+    //    Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
+    //    Vector3 right = camTransform.right; // right direction from camera
+
+    //    forward.y = 0; // sets vertivcal direction so players doesnt fly
+    //    right.y = 0; // sets vert dir to keep movement on x and z
+
+    //    // normalize movement to keep constant
+    //    forward.Normalize(); 
+    //    right.Normalize();
+
+    //    movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
+
+    //    HandleStamina(isSprinting); // use stamina function
+    //}
 
     private void HandleStamina(bool isSprinting)
     {
@@ -83,6 +99,22 @@ public class movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.z * currentSpeed); // set physics velocity
+
+        Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
+        Vector3 right = camTransform.right; // right direction from camera
+
+        forward.y = 0; // sets vertivcal direction so players doesnt fly
+        right.y = 0; // sets vert dir to keep movement on x and z
+
+        // normalize movement to keep constant
+        forward.Normalize();
+        right.Normalize();
+
+        movementDirection += forward;
+        movementDirection += right;
+
+        Debug.Log(movementDirection);
+
+        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.y * currentSpeed); // set physics velocity
     }
 }
