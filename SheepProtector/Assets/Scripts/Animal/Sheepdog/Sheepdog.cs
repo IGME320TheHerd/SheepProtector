@@ -43,33 +43,33 @@ public class Sheepdog : Animal
 
     private void Update()
     {
-        // Check to see if the player wants to bark.
-        bool barkCheck = Input.GetButton("Bark");
-        barkCooldownTimer -= Time.deltaTime;
+        //// Check to see if the player wants to bark.
+        //bool barkCheck = Input.GetButton("Bark");
+        //barkCooldownTimer -= Time.deltaTime;
 
-        // When the player presses down the bark button, have all bark actions go off.
-        if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
-        {
-            //Bark();
-            barkHeldDown = true;
-            barkCooldownTimer = maxBarkCooldown;
-        }
+        //// When the player presses down the bark button, have all bark actions go off.
+        //if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
+        //{
+        //    //Bark();
+        //    barkHeldDown = true;
+        //    barkCooldownTimer = maxBarkCooldown;
+        //}
 
-        // If the player is no longer holding down the bark button, reset the held down checker.
-        else if (!barkCheck && barkHeldDown)
-        {
-            barkHeldDown = false;
-        }
+        //// If the player is no longer holding down the bark button, reset the held down checker.
+        //else if (!barkCheck && barkHeldDown)
+        //{
+        //    barkHeldDown = false;
+        //}
 
-        if (barkVisTimer > 0.0f)
-        {
-            barkVisual.enabled = true;
-            barkVisTimer -= Time.deltaTime;
-        }
-        else
-        {
-            barkVisual.enabled = false;
-        }
+        //if (barkVisTimer > 0.0f)
+        //{
+        //    barkVisual.enabled = true;
+        //    barkVisTimer -= Time.deltaTime;
+        //}
+        //else
+        //{
+        //    barkVisual.enabled = false;
+        //}
     }
 
     /// <summary>
@@ -108,7 +108,7 @@ public class Sheepdog : Animal
     /// What should happen when the player uses the bark button.
     /// </summary>
     /// <param name="callBackContext"></param>
-    private void OnBark(InputAction.CallbackContext ctx)
+    public void OnBark(InputAction.CallbackContext ctx)
     {
         if (ctx.performed)
         {

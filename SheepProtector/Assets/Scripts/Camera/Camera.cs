@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class IsoCameraController : MonoBehaviour
 {
@@ -20,11 +21,23 @@ public class IsoCameraController : MonoBehaviour
     {
         transform.position = target.position; // snaps pivot to player position
 
-        if (Input.GetKeyDown(KeyCode.Q)) targetYRotation -= 45f; // rotates left 45 degrees on q press
-        if (Input.GetKeyDown(KeyCode.E)) targetYRotation += 45f; // rotates 45 degrees right on e press
-
-      
         Quaternion targetRotation = Quaternion.Euler(0, targetYRotation, 0); // creates quaternion value using y axis, left or right
         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed); // rotates from current rotation to target rotation 
+    }
+
+    public void OnCameraMoveLeft(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started && !ctx.performed)
+        {
+            targetYRotation -= 45f;
+        }
+    }
+
+    public void OnCameraMoveRight(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started && !ctx.performed)
+        {
+            targetYRotation += 45f;
+        }
     }
 }

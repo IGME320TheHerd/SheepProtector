@@ -48,38 +48,38 @@ public class Movement : MonoBehaviour
         }
     }
 
-    //void Update()
-    //{
-    //    // uses WASD for movement
-    //    float h = Input.GetAxisRaw("Horizontal");
-    //    float v = Input.GetAxisRaw("Vertical");
+    void Update()
+    {
+        // uses WASD for movement
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
 
-    //    bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
-    //    bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
+        bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
+        bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
 
-    //    if (isSprinting) // if sprinting
-    //    {
-    //        currentSpeed = sprint; // use sprint speed
-    //    }
-    //    else
-    //    {
-    //        currentSpeed = moveSpeed; // else use reg speed
-    //    }
+        if (isSprinting) // if sprinting
+        {
+            currentSpeed = sprint; // use sprint speed
+        }
+        else
+        {
+            currentSpeed = moveSpeed; // else use reg speed
+        }
 
-    //    Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
-    //    Vector3 right = camTransform.right; // right direction from camera
+        Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
+        Vector3 right = camTransform.right; // right direction from camera
 
-    //    forward.y = 0; // sets vertivcal direction so players doesnt fly
-    //    right.y = 0; // sets vert dir to keep movement on x and z
+        forward.y = 0; // sets vertivcal direction so players doesnt fly
+        right.y = 0; // sets vert dir to keep movement on x and z
 
-    //    // normalize movement to keep constant
-    //    forward.Normalize(); 
-    //    right.Normalize();
+        // normalize movement to keep constant
+        forward.Normalize();
+        right.Normalize();
 
-    //    movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
+        movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
 
-    //    HandleStamina(isSprinting); // use stamina function
-    //}
+        HandleStamina(isSprinting); // use stamina function
+    }
 
     private void HandleStamina(bool isSprinting)
     {
@@ -105,23 +105,6 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
-        Vector3 right = camTransform.right; // right direction from camera
-
-        forward.y = 0; // sets vertivcal direction so players doesnt fly
-        right.y = 0; // sets vert dir to keep movement on x and z
-
-        // normalize movement to keep constant
-        forward.Normalize();
-        right.Normalize();
-
-        movementDirection = (forward * v) + (right * h);
-
-        //movementDirection += forward;
-        //movementDirection += right;
-
-        //Debug.Log(movementDirection);
-
         rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, 0, movementDirection.y * currentSpeed); // set physics velocity
     }
 }

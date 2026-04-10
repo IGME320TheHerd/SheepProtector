@@ -65,16 +65,7 @@
                     "id": "641cd816-40e6-41b4-8c3d-04687c349290",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold(duration=1)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CameraMove",
-                    "type": "Button",
-                    "id": "d25776e1-047d-491e-a37e-95a1ea43d9a2",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
+                    "interactions": "Hold(duration=6)",
                     "initialStateCheck": false
                 }
             ],
@@ -113,31 +104,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "up",
-                    "id": "8180e8bd-4097-4f4e-ab88-4523101a6ce9",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "down",
                     "id": "320bffee-a40b-4347-ac70-c210eb8bc73a",
                     "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "down",
-                    "id": "1c5327b5-f71c-4f60-99c7-4e737386f1d1",
-                    "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -157,31 +126,9 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "left",
-                    "id": "2e46982e-44cc-431b-9f0b-c11910bf467a",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "right",
                     "id": "fcfe95b8-67b9-4526-84b5-5d0bc98d6400",
                     "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "right",
-                    "id": "77bff152-3580-4b21-b6de-dcd0c7e41164",
-                    "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
@@ -240,6 +187,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
+                    "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "381b45eb-7de7-4dec-9e35-8f79253250bb",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -419,39 +377,6 @@
                     "action": "Previous",
                     "isComposite": false,
                     "isPartOfComposite": false
-                },
-                {
-                    "name": "1D Axis",
-                    "id": "245a9ac8-e5b5-48ee-a235-cdbdfbd38b67",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "45138402-7b0b-4e69-ab5f-5d786279836a",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "f9d325ab-f1c6-4ab2-945e-7b4b3d3811e1",
-                    "path": "",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CameraMove",
-                    "isComposite": false,
-                    "isPartOfComposite": true
                 }
             ]
         },
@@ -1019,6 +944,76 @@
                     "processors": "",
                     "groups": ";Joystick;Gamepad",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "4b782b1d-184f-41fa-b471-a11c236d1ee1",
+            "actions": [
+                {
+                    "name": "CameraMoveLeft",
+                    "type": "Button",
+                    "id": "cf1d072b-a2f0-4ef3-b5d0-5aa0090952b0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap,Hold(duration=1)",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CameraMoveRight",
+                    "type": "Button",
+                    "id": "9b516bfd-6a88-463b-8941-40a2508af59c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Tap,Hold(duration=0.4)",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "18f2f0de-c961-4349-b1c5-af66154a5bfb",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "CameraMoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0d946ec4-6e70-454b-be86-6e398c37a3d8",
+                    "path": "<Gamepad>/leftShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "CameraMoveLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cfdfdd2e-033a-447c-acc0-0c28189b987f",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "CameraMoveRight",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe1940c3-57a7-440c-9a82-10858cef2e13",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "Hold(duration=1)",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "CameraMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
