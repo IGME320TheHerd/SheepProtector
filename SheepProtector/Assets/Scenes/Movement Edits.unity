@@ -1050,7 +1050,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 800734932}
-  - component: {fileID: 800734934}
+  - component: {fileID: 800734942}
   - component: {fileID: 800734941}
   - component: {fileID: 800734935}
   - component: {fileID: 800734936}
@@ -1081,25 +1081,6 @@ Transform:
   - {fileID: 2076757452}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &800734934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 800734931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 708c4ca1eab8bca49bf9f1521d8f6eef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 10
-  sprint: 15
-  camTransform: {fileID: 51639397}
-  staminaCircle: {fileID: 962413883}
-  maxStamina: 100
-  usageRate: 15
-  regenRate: 15
 --- !u!54 &800734935
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1330,8 +1311,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 800734934}
-        m_TargetAssemblyTypeName: movement, Assembly-CSharp
+      - m_Target: {fileID: 800734942}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -1374,8 +1355,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Next[/Keyboard/2]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 800734934}
-        m_TargetAssemblyTypeName: movement, Assembly-CSharp
+      - m_Target: {fileID: 800734942}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnSprint
         m_Mode: 0
         m_Arguments:
@@ -1437,6 +1418,21 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &800734942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800734931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e50429dbf23828143a4ad055f7ac2370, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 10
+  sprint: 15
+  cam: {fileID: 51639397}
 --- !u!1 &831016227
 GameObject:
   m_ObjectHideFlags: 0

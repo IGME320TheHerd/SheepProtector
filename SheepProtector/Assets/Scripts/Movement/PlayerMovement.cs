@@ -19,6 +19,8 @@ public class Movement : MonoBehaviour
     private Vector3 movementDirection; // reference to store movement direction
     private float currentStamina; //gets current stamina
     private float currentSpeed; // tracks current speed
+    float h;
+    float v;
 
     void Start()
     {
@@ -28,9 +30,13 @@ public class Movement : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext ctx)
     {
-        movementDirection = ctx.ReadValue<Vector2>();
-        currentSpeed = moveSpeed;
-        //Debug.Log(movementDirection);
+        if (ctx.performed)
+        {
+            h = ctx.ReadValue<Vector2>().x;
+            v = ctx.ReadValue<Vector2>().y;
+            currentSpeed = moveSpeed;
+            Debug.Log(movementDirection);
+        }
     }
 
     public void OnSprint(InputAction.CallbackContext ctx)
@@ -99,7 +105,6 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-
         Vector3 forward = camTransform.forward;  // gets forward direction pointing out from the camera
         Vector3 right = camTransform.right; // right direction from camera
 
@@ -110,11 +115,13 @@ public class Movement : MonoBehaviour
         forward.Normalize();
         right.Normalize();
 
-        movementDirection += forward;
-        movementDirection += right;
+        movementDirection = (forward * v) + (right * h);
 
-        Debug.Log(movementDirection);
+        //movementDirection += forward;
+        //movementDirection += right;
 
-        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.y * currentSpeed); // set physics velocity
+        //Debug.Log(movementDirection);
+
+        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, 0, movementDirection.y * currentSpeed); // set physics velocity
     }
 }
