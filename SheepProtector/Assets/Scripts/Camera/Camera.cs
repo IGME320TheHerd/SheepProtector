@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class IsoCameraController : MonoBehaviour
 {
     public Transform target; // refernce for player        
     public float rotationSpeed = 5f; // how fast the camera rotates
