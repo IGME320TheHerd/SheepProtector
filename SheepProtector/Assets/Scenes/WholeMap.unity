@@ -24546,6 +24546,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8015388064908008472, guid: e7ab3c9f7c3fb9d40adda4181e5944e3, type: 3}
   m_PrefabInstance: {fileID: 1308483373}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1310507872 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3269099351994295069, guid: cb46e75e8f331574292c3e200bf54906, type: 3}
+  m_PrefabInstance: {fileID: 2658240575702663880}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1315352286
 GameObject:
   m_ObjectHideFlags: 0
@@ -43044,6 +43049,10 @@ PrefabInstance:
       propertyPath: isMoving
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7880979664564364476, guid: cb46e75e8f331574292c3e200bf54906, type: 3}
+      propertyPath: barkSprite
+      value: 
+      objectReference: {fileID: 1310507872}
     - target: {fileID: 7880979664564364476, guid: cb46e75e8f331574292c3e200bf54906, type: 3}
       propertyPath: camTransform
       value: 
