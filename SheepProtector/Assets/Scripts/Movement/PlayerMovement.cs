@@ -80,6 +80,7 @@ public class movement : MonoBehaviour
         movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
 
         animator.SetBool("isMoving", isMoving);
+        animator.SetFloat("walkSpeed", rb.linearVelocity.magnitude/moveSpeed);
 
         if (isMoving)
         {
@@ -115,5 +116,6 @@ public class movement : MonoBehaviour
     void FixedUpdate()
     {
         rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.z * currentSpeed); // set physics velocity
+        rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, currentSpeed);
     }
 }
