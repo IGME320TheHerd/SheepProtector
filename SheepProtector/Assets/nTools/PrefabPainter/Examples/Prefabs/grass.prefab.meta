@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 061faed207d7a4b52b09b4f68119bae4
+timeCreated: 1493295517
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/grass.prefab
+  uploadId: 653896

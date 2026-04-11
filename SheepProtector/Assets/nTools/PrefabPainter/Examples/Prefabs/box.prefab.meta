@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 2775c26e84b054356801677a43337ef5
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/box.prefab
+  uploadId: 653896

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 2b27506c190f441f79f1ce33c9e8c66b
+timeCreated: 1461241206
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Materials/Water.mat
+  uploadId: 653896

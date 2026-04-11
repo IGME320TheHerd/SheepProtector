@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6edf1e8abaaa74941af7f2c89366d384
+timeCreated: 1491383604
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Materials/Red.mat
+  uploadId: 653896
