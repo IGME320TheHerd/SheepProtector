@@ -50,8 +50,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708c4ca1eab8bca49bf9f1521d8f6eef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  sprint: 15
+  moveSpeed: 17
+  sprint: 23
   camTransform: {fileID: 0}
   staminaCircle: {fileID: 0}
   maxStamina: 100
@@ -119,12 +119,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 620a155450e08a140a5d2e80217fd5d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rBody: {fileID: 9033058131140365779}
+  rBody: {fileID: 0}
   maxSpeed: 0
   myAudioSource: {fileID: 6283388014086135193}
   barkSound: {fileID: 8300000, guid: 056a51d8e666c1246ad08cdb58f8f57d, type: 3}
   barkVisual: {fileID: 6229573811601635640}
-  maxBarkCooldown: 0.5
+  maxBarkCooldown: 1
   herdDist: 5
   herdStrength: 500
 --- !u!135 &71375428592404411
