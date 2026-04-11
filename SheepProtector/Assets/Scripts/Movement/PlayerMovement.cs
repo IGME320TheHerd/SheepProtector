@@ -1,10 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
-public class movement : MonoBehaviour
+public class Movement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 10f; // movement speed
     [SerializeField] private float sprint = 15f; // sprint speed
@@ -19,11 +19,33 @@ public class movement : MonoBehaviour
     private Vector3 movementDirection; // reference to store movement direction
     private float currentStamina; //gets current stamina
     private float currentSpeed; // tracks current speed
+    float h;
+    float v;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>(); // attaches rigid body
         currentStamina = maxStamina; // start with max stamina
+    }
+
+    public void OnMove(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            h = ctx.ReadValue<Vector2>().x;
+            v = ctx.ReadValue<Vector2>().y;
+            currentSpeed = moveSpeed;
+            Debug.Log(movementDirection);
+        }
+    }
+
+    public void OnSprint(InputAction.CallbackContext ctx)
+    {
+        if (ctx.started)
+        {
+            Debug.Log("Sprinting!");
+            currentSpeed = sprint;
+        }
     }
 
     void Update()
@@ -49,9 +71,9 @@ public class movement : MonoBehaviour
 
         forward.y = 0; // sets vertivcal direction so players doesnt fly
         right.y = 0; // sets vert dir to keep movement on x and z
-        
+
         // normalize movement to keep constant
-        forward.Normalize(); 
+        forward.Normalize();
         right.Normalize();
 
         movementDirection = (forward * v) + (right * h); // compare input and camera to get direction
@@ -83,6 +105,6 @@ public class movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.z * currentSpeed); // set physics velocity
+        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, 0, movementDirection.y * currentSpeed); // set physics velocity
     }
 }
