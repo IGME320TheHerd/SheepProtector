@@ -38,12 +38,39 @@ public class Sheepdog : Animal
     private void Start()
     {
         // Set up barking.
+        barkHeldDown = false;
         barkReactors = new System.Collections.Generic.List<Animal>();
     }
 
     private void Update()
     {
-        
+        //// Check to see if the player wants to bark.
+        //bool barkCheck = Input.GetButton("Bark");
+        //barkCooldownTimer -= Time.deltaTime;
+
+        //// When the player presses down the bark button, have all bark actions go off.
+        //if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
+        //{
+        //    //Bark();
+        //    barkHeldDown = true;
+        //    barkCooldownTimer = maxBarkCooldown;
+        //}
+
+        //// If the player is no longer holding down the bark button, reset the held down checker.
+        //else if (!barkCheck && barkHeldDown)
+        //{
+        //    barkHeldDown = false;
+        //}
+
+        //if (barkVisTimer > 0.0f)
+        //{
+        //    barkVisual.enabled = true;
+        //    barkVisTimer -= Time.deltaTime;
+        //}
+        //else
+        //{
+        //    barkVisual.enabled = false;
+        //}
     }
 
     /// <summary>
@@ -115,42 +142,39 @@ public class Sheepdog : Animal
     /// <summary>
     /// What should happen when the player uses the bark button.
     /// </summary>
-    /// <param name="context"> The input button pressed to call this function. </param>
-    //public void Bark(InputAction.CallbackContext context)
-    public void Bark() // TODO: REPLACE THIS LINE WITH THE ONE ABOVE WHEN INPUT GETS UPDATED
+    /// <param name="callBackContext"></param>
+    public void OnBark(InputAction.CallbackContext ctx)
     {
-        // When the player presses down the bark button, make sure bark is off cooldown before activating again.
-        if (barkCooldownTimer <= 0.0f)
+        if (ctx.performed)
         {
-            barkHeldDown = true; // TODO: REMOVE THIS WHEN INPUT GETS UPDATED
-            barkCooldownTimer = maxBarkCooldown;
-        // Play sound 
-        if (myAudioSource != null && barkSound != null)
-        {
-            myAudioSource.resource = barkSound;
-            myAudioSource.Play();
-        }
-
-        // Show visual
-        if (barkVisual != null)
-        {
-            barkVisTimer = 0.5f;
-        }
-
-        for (int i = 0; i < barkReactors.Count; i++)
-        {
-            if (barkReactors[i] != null)
+            // Play sound 
+            if (myAudioSource != null && barkSound != null)
             {
-                barkReactors[i].BarkReaction();
+                myAudioSource.resource = barkSound;
+                myAudioSource.Play();
+            }
 
-                // If the bark reactor is the sheep, tell the sheep that
-                // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
-                if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+            // Show visual
+            if (barkVisual != null)
+            {
+                barkVisTimer = 0.5f;
+            }
+
+            for (int i = 0; i < barkReactors.Count; i++)
+            {
+                if (barkReactors[i] != null)
                 {
-                    sheep.TooClose = false;
+                    barkReactors[i].BarkReaction();
+
+                    // If the bark reactor is the sheep, tell the sheep that
+                    // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                    if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
+                    {
+                        sheep.TooClose = false;
+                        //sheep.InRangeBarkCheck = false;
+                    }
                 }
             }
-        }
         }
     }
 

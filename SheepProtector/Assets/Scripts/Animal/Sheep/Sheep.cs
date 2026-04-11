@@ -52,17 +52,20 @@ public class Sheep : Animal
     // How fast sheep goes during wander
     public float wanderSpeed = 6.0f;
 
-    private float randomWanderTimer;
-    private float stopWanderTimer;
-
     private bool outOfRange = false;
+
     private float rangeWaitTimer = 0.0f;
 
+
+    private float randomWanderTimer;
+
+    private float stopWanderTimer;
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
     private float closeTimer;
     [SerializeField]private float maxCloseTimer = 5.0f;
+    private SpriteRenderer sr;
 
     /// <summary>
     /// Make tooClose public;
@@ -89,6 +92,7 @@ public class Sheep : Animal
     /// </summary>
     private void Start()
     {
+        sr = GetComponentInChildren<SpriteRenderer>();
         randomWanderTimer = stillTime;
         stopWanderTimer = wanderLength;
         closeTimer = 0;
@@ -296,6 +300,17 @@ public class Sheep : Animal
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, transform.up), Color.blue);
         Debug.DrawRay(transform.position, Vector3.Cross(velocity.normalized * hitdist, -transform.up), Color.green);
 
+        Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        float angle = Vector3.SignedAngle(velocity.normalized, camForward, Vector3.up);
+
+        if (angle > 5 && angle < 175)
+        {
+            sr.flipX = true;
+        }
+        else if (angle < -5 && angle > -175)
+        {
+            sr.flipX = false;
+        }
     }
 
     /// <summary>
