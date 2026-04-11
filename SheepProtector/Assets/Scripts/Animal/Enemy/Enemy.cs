@@ -1,6 +1,7 @@
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 
 /// <summary>
 /// The different types of enemies.
@@ -48,11 +49,13 @@ public class Enemy : Animal
     private float wanderTimer;
     private float maxWanderTime;
     private float wanderSpeed;
+    private Vector3 wanderPos;
 
     // The starting position of the enemy.
     private Vector3 home;
     private float maxHomeDist; // How far the enemy can be from its home before it stops chasing.
     private bool goHome = false;
+    private NavMeshAgent agent;
 
     // What type the enemy is.
     [SerializeField] private EnemyType type;
@@ -79,6 +82,7 @@ public class Enemy : Animal
         stunTimer = -999.0f;
 
         home = transform.position;
+        agent = GetComponent<NavMeshAgent>();
 
         // Set all of the specific variables that change based on what type the enemy is.
         switch (type)
@@ -87,7 +91,7 @@ public class Enemy : Animal
             case EnemyType.Wolf:
                 maxStartTime = 2.0f;
                 maxEndTime = 5.0f;
-                maxSpeed = 10.0f;
+                topSpeed = 10.0f;
                 slowedSpeed = 5.0f;
                 slowedTimer = 5.0f;
                 barkStunTime = 5.0f;
@@ -102,7 +106,7 @@ public class Enemy : Animal
             case EnemyType.Bear:
                 maxStartTime = 1.0f;
                 maxEndTime = 3.0f;
-                maxSpeed = 8.0f;
+                topSpeed = 8.0f;
                 slowedSpeed = 4.0f;
                 barkSlowTime = 2.0f;
                 slowCooldownTime = 2.0f;
@@ -117,9 +121,10 @@ public class Enemy : Animal
         endTimer = 0.0f;
         readyStart = false;
         readyEnd = false;
-        topSpeed = maxSpeed;
         stunTimer = -99.0f;
         startFinding = false;
+        agent.speed = topSpeed;
+        maxWanderTime = 5.0f;
 
         // If the enemy's reference to the player game object is null, grab it.
         if (player == null)
@@ -134,25 +139,23 @@ public class Enemy : Animal
     private void Update()
     {
         // Have the enemy move.
-        acceleration = Vector3.zero;
         Movement();
-
-        // Make sure that the enemy is not moving upwards.
-        acceleration.y = 0.0f;
 
         // Check to see if the enemy has moved too far away from its home.
         if (chasing && Vector3.Distance(transform.position, home) > maxHomeDist)
         {
             // If the enemy has moved too far from its home, have it move back.
             goHome = true;
+            agent.destination = home;
+            agent.speed = topSpeed;
         }
 
         // If the enemy has made it back to its home, have it stop and go back to the still state of the enemy.
         else if (goHome && Vector3.Distance(transform.position, home) <= 7.0)
         {
             goHome = false;
-            velocity = Vector3.zero;
-            acceleration = Vector3.zero;
+            agent.speed = 0;
+            agent.destination = transform.position;
         }
     }
 
@@ -211,7 +214,7 @@ public class Enemy : Animal
                     // Slow down the wolf if enough time has passed.
                     if (slowedTimer <= -1 * slowCooldownTime)
                     {
-                        maxSpeed = slowedSpeed;
+                        agent.speed = slowedSpeed;
                         slowedTimer = barkSlowTime;
                     }
                 }
@@ -224,7 +227,7 @@ public class Enemy : Animal
                 if (Vector3.Distance(transform.position, chaseTarget.transform.position) > slowDist)
                 {
                     slowedTimer = barkSlowTime;
-                    maxSpeed = slowedSpeed;
+                    agent.speed = slowedSpeed;
                 }
                     break;
         }
@@ -280,6 +283,7 @@ public class Enemy : Animal
             {
                 readyStart = false;
                 chasing = true;
+                agent.SetDestination(chaseTarget.transform.position);
             }
         }
 
@@ -296,25 +300,20 @@ public class Enemy : Animal
                 chasing = false;
                 chaseTarget = null;
                 endTimer = -1.0f;
+                agent.SetDestination(home);
             }
         }
 
         // If the enemy is slowed down, have the slowed timer decrease.
-        if (slowedTimer > 0.0f)
-        {
-            slowedTimer -= Time.deltaTime;
-        }
-
-        // If the wolf was previously slowed, have it go off of cooldown.
-        else if (slowedTimer >= -1 * slowCooldownTime)
+        if (slowedTimer > -1 * slowCooldownTime)
         {
             slowedTimer -= Time.deltaTime;
         }
 
         // If the enemy just stopped being slowed down, or frozen, reset the max speed to the enemy's top speed.
-        else if (maxSpeed == slowedSpeed || (maxSpeed == 0.0f && stunTimer <= 0.0f && chasing))
+        else if (agent.speed == slowedSpeed || (agent.speed == 0.0f && stunTimer <= 0.0f && chasing))
         {
-            maxSpeed = topSpeed;
+            agent.speed = topSpeed;
         }
 
         if (startFinding)
@@ -338,25 +337,20 @@ public class Enemy : Animal
             }
         }
 
-        // If the eenmy has gone too far from its home, have it go back.
-        if (goHome)
-        {
-            acceleration += Seek(home);
-        }
-
         // If the enemy is not chasing something, have it wander around its home area.
         else if (wandering && wallCast)
         {
             wanderTimer -= Time.deltaTime;
 
             // If the enemy wanders for too long, have it stop wandering.
-            if (wanderTimer <= 0.0f)
+            if (wanderTimer <= 0.0f || transform.position == wanderPos)
             {
                 wandering = false;
-                maxSpeed = topSpeed;
+                agent.speed = topSpeed;
+                agent.SetDestination(transform.position);
+                wanderPos = Vector3.zero;
                 wanderTimer = maxWanderTime;
             }
-            acceleration += Wander(3.0f, 4.0f, 0.5f);
         }
 
         // If the enemy is chasing something and is not stunned, have it move towards the chase target.
@@ -366,49 +360,55 @@ public class Enemy : Animal
             if (chasePlayerTimer > 0.0f)
             {
                 chasePlayerTimer -= Time.deltaTime;
-                acceleration += Seek(chaseTarget.transform.position);
+                agent.SetDestination(player.transform.position);
             }
 
             // If the enemy has not changed its target, have it chase the chase target.
             else
             {
-                Debug.DrawRay(transform.position, sheepAngle * 
-                    Vector3.Distance(transform.position, chaseTarget.transform.position) / 2, Color.red, 1.0f);
+                if (chaseTarget != null)
+                {
+                    Debug.DrawRay(transform.position, sheepAngle *
+                        Vector3.Distance(transform.position, chaseTarget.transform.position) / 2, Color.red, 1.0f);
+                }
 
                 // If the enemy loses line of sight, have it travel towards the last known position.
                 if (wallCast)
                 {
                     if (!hitFound.collider.gameObject.TryGetComponent<Animal>(out Animal otherAnimal))
                     {
-                        acceleration += Seek(lastPosition);
+                        agent.SetDestination(lastPosition);
 
                         // If the enemy has reached the last known position and cannot see the chase target still, have it stop chasing.
                         if (transform.position == lastPosition)
                         {
                             chasing = false;
+                            agent.SetDestination(transform.position);
                         }
                     }
                     else
                     {
                         lastPosition = chaseTarget.transform.position;
-                        acceleration += Seek(chaseTarget.transform.position);
+                        agent.SetDestination(chaseTarget.transform.position);
                     }
                 }
                 else
                 {
                     lastPosition = chaseTarget.transform.position;
-                    acceleration += Seek(chaseTarget.transform.position);
+                    agent.SetDestination(chaseTarget.transform.position);
                 }
                 
             }
         }
 
         // If the enemy is stunned, don't have it move.
-        else if (chasing)
+        else if (chasing || goHome)
         {
-            velocity = Vector3.zero;
+            // This is only here to prevent anything else from going off.
         }
 
+        // If the enemy has lost sight, have it travel towards the last known position.
+        // If the enemy has no target, have it wander around.
         else
         {
             if (chaseTarget != null)
@@ -417,19 +417,20 @@ public class Enemy : Animal
                 // If the enemy loses line of sight, have it travel towards the last known position.
                 if (!wallCast)
                 {
-                    acceleration += Seek(lastPosition);
+                    agent.SetDestination(lastPosition);
 
                     // If the enemy has reached the last known position and cannot see the chase target still, have it stop chasing.
                     if (transform.position == lastPosition)
                     {
                         chasing = false;
+                        agent.SetDestination(transform.position);
                     }
                 }
             }
             else
             {
                 wanderTimer -= Time.deltaTime;
-                maxSpeed = 0.0f;
+                agent.speed = 0.0f;
 
                 // If the random wander timer reaches 0, check to see if the enemy should wander.
                 if (wanderTimer <= 0.0f)
@@ -439,15 +440,15 @@ public class Enemy : Animal
                     if (rng <= 40.0f)
                     {
                         wandering = true;
-                        maxSpeed = wanderSpeed;
+                        wanderPos = Random.onUnitSphere * 7;
+                        agent.SetDestination(wanderPos);
+                        agent.speed = wanderSpeed;
                     }
 
                     wanderTimer = maxWanderTime;
                 }
             }
         }
-
-        acceleration = Vector3.ClampMagnitude(acceleration, maxSpeed);
     }
 
     /// <summary>
