@@ -43061,6 +43061,10 @@ PrefabInstance:
       propertyPath: staminaCircle
       value: 
       objectReference: {fileID: 962413883}
+    - target: {fileID: 9143841238094445861, guid: cb46e75e8f331574292c3e200bf54906, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 51639397}
     - target: {fileID: 9180790720478908271, guid: cb46e75e8f331574292c3e200bf54906, type: 3}
       propertyPath: rBody
       value: 

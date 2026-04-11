@@ -29,7 +29,7 @@ public class IsoCameraController : MonoBehaviour
     {
         if (ctx.started && !ctx.performed)
         {
-            targetYRotation -= 45f;
+            targetYRotation -= 22.5f;
         }
     }
 
@@ -37,7 +37,7 @@ public class IsoCameraController : MonoBehaviour
     {
         if (ctx.started && !ctx.performed)
         {
-            targetYRotation += 45f;
+            targetYRotation += 22.5f;
         }
     }
 }
