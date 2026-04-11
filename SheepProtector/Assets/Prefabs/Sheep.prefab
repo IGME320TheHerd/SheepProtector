@@ -161,6 +161,9 @@ MonoBehaviour:
   player: {fileID: 0}
   wallFleeWeight: 150
   leaveFleeDist: 10
+  fleeHerdSpeed: 18
+  fleeBarkSpeed: 20
+  fleeAccelerationMult: 200
   stillTime: 3
   wanderLength: 15
   wanderSpeed: 6
