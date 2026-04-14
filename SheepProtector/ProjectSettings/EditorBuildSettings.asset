@@ -20,9 +20,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Tutorial.unity
     guid: dbd945bc8cc7d6c40b7d3df39632372b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/WholeMap.unity
     guid: 15f2059677c6f804a9d26db76b06c910
+  - enabled: 1
+    path: Assets/Scenes/UpdatedMap.unity
+    guid: 1cc7fcfa19713db4484c9763d1b3c405
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

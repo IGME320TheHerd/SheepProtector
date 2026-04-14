@@ -116,7 +116,6 @@ GameObject:
   - component: {fileID: 5697613955255780589}
   - component: {fileID: 3754122205258450705}
   - component: {fileID: 2876298239664316734}
-  m_Layer: 6
   m_Layer: 0
   m_Name: Sheep
   m_TagString: Untagged
@@ -162,6 +161,9 @@ MonoBehaviour:
   player: {fileID: 0}
   wallFleeWeight: 150
   leaveFleeDist: 10
+  fleeHerdSpeed: 18
+  fleeBarkSpeed: 20
+  fleeAccelerationMult: 200
   stillTime: 3
   wanderLength: 15
   wanderSpeed: 6

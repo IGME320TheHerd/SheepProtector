@@ -43,6 +43,12 @@ public class Sheep : Animal
     // If the sheep gets this far away from a flee target, it will no longer be fleeing from that target.
     [SerializeField] private float leaveFleeDist = 10.0f;
 
+    [SerializeField] private float fleeHerdSpeed = 7.0f;
+
+    [SerializeField] private float fleeBarkSpeed = 13.0f;
+
+    [SerializeField] private float fleeAccelerationMult = 200.0f;
+
     // How long between rng checks for sheep attempting to wander
     public float stillTime = 3.0f;
 
@@ -131,7 +137,7 @@ public class Sheep : Animal
             timeLowered = false;
         }
 
-        maxSpeed = 13f;
+        maxSpeed = fleeBarkSpeed;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -140,17 +146,7 @@ public class Sheep : Animal
     /// </summary>
     public override void Die()
     {
-        // Get the game manager
-        GameManager gameOverCaller = GameObject.FindAnyObjectByType<GameManager>();
 
-        // If a game manager was not found, create a new one.
-        if (gameOverCaller == null)
-        {
-            gameOverCaller = new GameManager();
-        }
-
-        // Set the state of the game over manager to the game over state.
-        gameOverCaller.SetState(4);
     }
 
     private void Update()
@@ -262,7 +258,7 @@ public class Sheep : Animal
 
                 }
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
-                acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
+                acceleration += Flee(fleeTarget) * fleeAccelerationMult / playerdist / leaveFleeDist;
                 break;
         }
 
@@ -273,23 +269,21 @@ public class Sheep : Animal
         float hitdist = 5.0f;
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist, 0, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
         {
             acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, 
-            Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist, 0, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
         {
             acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
-        if (Physics.Raycast(transform.position, 
-            Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist, 0, QueryTriggerInteraction.Ignore))
+        if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
         {
             acceleration += hit3.normal * wallFleeWeight * ((1 / hit3.distance) / hitdist);
             stopWanderTimer -= wanderLength * 0.01f;
@@ -359,14 +353,14 @@ public class Sheep : Animal
         // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
-            && !other.isTrigger)
+            && other.GetType() != typeof(SphereCollider))
         {
             inRangeBarkCheck = true;
             if (currentState != SheepState.Flee || closeTimer > 0)
             {
                 tooClose = true;
                 fleeTarget = other.gameObject;
-                maxSpeed = 7f;
+                maxSpeed = fleeHerdSpeed;
                 closeTimer = maxCloseTimer;
                 ToFleeState(fleeTarget.transform.position);
             }
@@ -383,7 +377,7 @@ public class Sheep : Animal
         // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
         // have it flee from the dog until it gets far enough away.
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
-            && !other.isTrigger
+            && other.GetType() != typeof(SphereCollider)
             && inRangeBarkCheck)
         {
             if (inRangeBarkCheck && !tooClose)

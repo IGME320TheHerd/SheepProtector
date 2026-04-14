@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 229fffa0503864bf9994e06525afb0dd
+timeCreated: 1490864829
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Materials/Footsteps.mat
+  uploadId: 653896

@@ -1,8 +1,8 @@
 using NUnit.Framework;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Audio;
+using UnityEngine.InputSystem;
 
 public class Sheepdog : Animal
 {
@@ -22,9 +22,8 @@ public class Sheepdog : Animal
         set { barkReactors = value; }
     }
 
-    private bool barkHeldDown = false; // TODO: REMOVE THIS WHEN UPDATING THE PLAYER INPUT.
-
-    // Make sure the player cannot spam the bark button.
+    // Checks if the bark button is held down.
+    private bool barkHeldDown;
     [SerializeField] private float maxBarkCooldown = 0.5f;
     private float barkCooldownTimer = 0.0f;
 
@@ -62,38 +61,6 @@ public class Sheepdog : Animal
         //    barkHeldDown = false;
         //}
 
-        //if (barkVisTimer > 0.0f)
-        //{
-        //    barkVisual.enabled = true;
-        //    barkVisTimer -= Time.deltaTime;
-        //}
-        //else
-        //{
-        //    barkVisual.enabled = false;
-        //}
-    }
-
-    /// <summary>
-    /// Update is called once per frame
-    /// </summary>
-    private void FixedUpdate()
-    {
-        // Decrease the bark cooldown.       
-        if (barkCooldownTimer > 0.0f)
-        {
-            barkCooldownTimer -= Time.deltaTime;
-        }
-
-        // TODO: REMOVE THIS WHEN INPUT GETS UPDATED
-        if (Input.GetButton("Bark") && !barkHeldDown)
-        {
-            Bark();
-        }
-        else
-        {
-            barkHeldDown = false;
-        }
-
         if (barkVisTimer > 0.0f)
         {
             barkVisual.enabled = true;
@@ -103,6 +70,14 @@ public class Sheepdog : Animal
         {
             barkVisual.enabled = false;
         }
+    }
+
+    /// <summary>
+    /// Update is called once per frame
+    /// </summary>
+    private void FixedUpdate()
+    {
+
     }
 
     /// <summary>
@@ -118,17 +93,7 @@ public class Sheepdog : Animal
     /// </summary>
     public override void Die()
     {
-        // Get the game manager
-        GameManager gameOverCaller = GameObject.FindAnyObjectByType<GameManager>();
-
-        // If a game manager was not found, create a new one.
-        if (gameOverCaller == null)
-        {
-            gameOverCaller = new GameManager();
-        }
-
-        // Set the state of the game over manager to the game over state.
-        gameOverCaller.SetState(4);
+        
     }
 
     /// <summary>
