@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: b1a7023ae95504990b85830956b5db29
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/boxwcans.prefab
+  uploadId: 653896

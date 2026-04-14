@@ -61,15 +61,15 @@ public class Sheepdog : Animal
         //    barkHeldDown = false;
         //}
 
-        //if (barkVisTimer > 0.0f)
-        //{
-        //    barkVisual.enabled = true;
-        //    barkVisTimer -= Time.deltaTime;
-        //}
-        //else
-        //{
-        //    barkVisual.enabled = false;
-        //}
+        if (barkVisTimer > 0.0f)
+        {
+            barkVisual.enabled = true;
+            barkVisTimer -= Time.deltaTime;
+        }
+        else
+        {
+            barkVisual.enabled = false;
+        }
     }
 
     /// <summary>

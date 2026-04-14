@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: bd09f0681f28b484fb0610ef52f7254c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 8574412962073106934
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 187634
+  packageName: Handpainted Grass & Ground Textures
+  packageVersion: 1.4
+  assetPath: Assets/Handpainted_Grass_and_Ground_Textures/Demo/terrain_layers/Grass_lighted_down.terrainlayer
+  uploadId: 723919

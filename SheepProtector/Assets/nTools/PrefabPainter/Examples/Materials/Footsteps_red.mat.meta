@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 941ee9c334b1a4efebb5c61885932fb3
+timeCreated: 1490866032
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Materials/Footsteps_red.mat
+  uploadId: 653896

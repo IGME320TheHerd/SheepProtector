@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: e51a37bcc81e8447ba329ac52a59897a
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/crushedcan_b.prefab
+  uploadId: 653896

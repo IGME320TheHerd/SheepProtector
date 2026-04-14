@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -13,20 +14,40 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float usageRate = 15f;
     [SerializeField] private float regenRate = 10f;
+    [SerializeField] private GameObject barkSprite;
 
     Rigidbody rb;
     Vector2 moveInput = Vector2.zero;
     float currentSpeed;
     float currentStamina; //gets current stamina
+    Vector3 currentDir = Vector3.zero;
+    SpriteRenderer playerSprite;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        playerSprite = GetComponentInChildren<SpriteRenderer>(); 
     }
 
     private void FixedUpdate()
     {
+        Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        float angle = Vector3.SignedAngle(currentDir, camForward, Vector3.up);
+
+        if (angle > 5 && angle < 175)
+        {
+            playerSprite.flipX = true;
+            barkSprite.transform.localPosition = new Vector3(-5.5f, 1.83f, 0.0f);
+            barkSprite.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if (angle < -5 && angle > -175)
+        {
+            playerSprite.flipX = false;
+            barkSprite.transform.localPosition = new Vector3(5.5f, 1.83f, 0.0f);
+            barkSprite.GetComponent<SpriteRenderer>().flipX = false;
+        }
+
         rb.angularVelocity = Vector3.zero;
         rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
 
@@ -35,6 +56,7 @@ public class PlayerController : MonoBehaviour
         pos += moveInput.y * currentSpeed * Time.deltaTime * cam.forward;
         pos += moveInput.x * currentSpeed * Time.deltaTime * cam.right;
 
+        currentDir = pos;
         rb.MovePosition(pos);
     }
 

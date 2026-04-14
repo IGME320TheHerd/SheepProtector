@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: d36dd05418b8441acb75d1b145f197a7
+timeCreated: 1493296243
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Scenes/CleanScene.unity
+  uploadId: 653896
