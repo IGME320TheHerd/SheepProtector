@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 1b0c486dee8904d95a666bbd0aafda94
+timeCreated: 1490864948
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Scripts/PrefabPainterSettings.cs
+  uploadId: 653896

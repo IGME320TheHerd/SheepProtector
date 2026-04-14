@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 388a4661237104b49b1ede1cda315eb6
+timeCreated: 1493295887
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/footstep_b01.prefab
+  uploadId: 653896

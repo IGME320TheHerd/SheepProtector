@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0c5f92a5b8ebc4db8aa87d1c7d3572b9
+timeCreated: 1578654551
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Presets/Decal.json
+  uploadId: 653896

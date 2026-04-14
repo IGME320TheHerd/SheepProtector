@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 15f8621e4067f419dafbbb40b80416b5
+timeCreated: 1493295699
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/powerup.prefab
+  uploadId: 653896

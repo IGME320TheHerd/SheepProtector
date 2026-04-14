@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 21931cfe3cae34bd9a826707883dbdce
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Examples/Prefabs/cab_b.prefab
+  uploadId: 653896

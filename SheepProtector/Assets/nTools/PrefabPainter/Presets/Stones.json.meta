@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c24a9a7b6298b46b7b883fd47af930f6
+timeCreated: 1578655173
+licenseType: Store
+TextScriptImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61331
+  packageName: Prefab Painter 2
+  packageVersion: 2.8
+  assetPath: Assets/nTools/PrefabPainter/Presets/Stones.json
+  uploadId: 653896
