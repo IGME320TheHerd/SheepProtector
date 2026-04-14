@@ -36,7 +36,6 @@ public abstract class Agent : MonoBehaviour
 
         velocity += acceleration * Time.fixedDeltaTime;
         velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
-        velocity = new Vector3(velocity.x, 0.0f, velocity.z);
 
         if (velocity.magnitude != 0)
         {

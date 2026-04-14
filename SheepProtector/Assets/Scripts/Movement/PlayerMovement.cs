@@ -41,12 +41,7 @@ public class Movement : MonoBehaviour
             h = ctx.ReadValue<Vector2>().x;
             v = ctx.ReadValue<Vector2>().y;
             currentSpeed = moveSpeed;
-        }
-
-        if (ctx.canceled)
-        {
-            h = 0.0f;
-            v = 0.0f;
+            Debug.Log(movementDirection);
         }
     }
 
@@ -71,13 +66,13 @@ public class Movement : MonoBehaviour
         if (angle > 5 && angle < 175)
         {
             sr.flipX = true;
-            barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
+            barkSprite.transform.localPosition = new Vector3(-5.5f, 1.83f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (angle < -5 && angle > -175)
         {
             sr.flipX = false;
-            barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
+            barkSprite.transform.localPosition = new Vector3(5.5f, 1.83f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
         }
 
@@ -142,6 +137,6 @@ public class Movement : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, rb.linearVelocity.y, movementDirection.z * currentSpeed); // set physics velocity
+        rb.linearVelocity = new Vector3(movementDirection.x * currentSpeed, 0, movementDirection.y * currentSpeed); // set physics velocity
     }
 }

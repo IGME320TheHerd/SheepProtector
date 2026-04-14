@@ -43,12 +43,6 @@ public class Sheep : Animal
     // If the sheep gets this far away from a flee target, it will no longer be fleeing from that target.
     [SerializeField] private float leaveFleeDist = 10.0f;
 
-    [SerializeField] private float fleeHerdSpeed = 7.0f;
-
-    [SerializeField] private float fleeBarkSpeed = 13.0f;
-
-    [SerializeField] private float fleeAccelerationMult = 200.0f;
-
     // How long between rng checks for sheep attempting to wander
     public float stillTime = 3.0f;
 
@@ -137,7 +131,7 @@ public class Sheep : Animal
             timeLowered = false;
         }
 
-        maxSpeed = fleeBarkSpeed;
+        maxSpeed = 13f;
         ToFleeState(fleeTarget.transform.position);
     }
 
@@ -268,7 +262,7 @@ public class Sheep : Animal
 
                 }
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
-                acceleration += Flee(fleeTarget) * fleeAccelerationMult / playerdist / leaveFleeDist;
+                acceleration += Flee(fleeTarget) * 200.0f / playerdist / leaveFleeDist;
                 break;
         }
 
@@ -372,7 +366,7 @@ public class Sheep : Animal
             {
                 tooClose = true;
                 fleeTarget = other.gameObject;
-                maxSpeed = fleeHerdSpeed;
+                maxSpeed = 7f;
                 closeTimer = maxCloseTimer;
                 ToFleeState(fleeTarget.transform.position);
             }
