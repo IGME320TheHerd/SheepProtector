@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float usageRate = 15f;
     [SerializeField] private float regenRate = 10f;
+    [SerializeField] private Gradient staminaGradient;
+
     [SerializeField] private GameObject barkSprite;
 
     private Rigidbody rb; // reference for player 
@@ -73,12 +75,32 @@ public class Movement : MonoBehaviour
             sr.flipX = true;
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
+
+            if(staminaCircle != null)
+            {
+                RectTransform rect = staminaCircle.rectTransform;
+                rect.localScale = new Vector3(-1, 1, 1);
+
+                Vector3 pos = rect.localPosition;
+                pos.x = -Mathf.Abs(pos.x);
+                rect.localPosition = pos;
+            }
         }
         else if (angle < -5 && angle > -175)
         {
             sr.flipX = false;
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
+
+            if (staminaCircle != null)
+            {
+                RectTransform rect = staminaCircle.rectTransform;
+                rect.localScale = new Vector3(1, 1, 1);
+
+                Vector3 pos = rect.localPosition;
+                pos.x = Mathf.Abs(pos.x);
+                rect.localPosition = pos;
+            }
         }
 
         bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
@@ -133,7 +155,10 @@ public class Movement : MonoBehaviour
 
         if(staminaCircle != null) // if theres ui circle assigned
         {
-            staminaCircle.fillAmount = currentStamina / maxStamina; // update circle ui
+            float fillRatio = currentStamina / maxStamina;
+            staminaCircle.fillAmount = fillRatio; // update circle ui
+
+            staminaCircle.color = staminaGradient.Evaluate(fillRatio);
 
             bool isFull = currentStamina >= maxStamina; // check for stamina full
             staminaCircle.enabled = !isFull; //if full get rid of ui
