@@ -70,16 +70,18 @@ public class Movement : MonoBehaviour
 
         if (angle > 5 && angle < 175)
         {
-            sr.flipX = true;
+            sr.material.SetFloat("_FlipX", 1);
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
         }
         else if (angle < -5 && angle > -175)
         {
-            sr.flipX = false;
+            sr.material.SetFloat("_FlipX", 0);
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
         }
+
+        Debug.Log(sr.material.GetFloat("_FlipX"));
 
         bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
         bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina
