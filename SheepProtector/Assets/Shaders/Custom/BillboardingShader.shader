@@ -11,6 +11,7 @@ Shader "Custom/BillboardingShader"
         Tags{ "Queue" = "Transparent" "IgnoreProjector" = "True" "RenderType" = "Transparent" "DisableBatching" = "True" }
 
         ZWrite Off
+        Cull Off
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
@@ -42,17 +43,13 @@ Shader "Custom/BillboardingShader"
             v2f vert(appdata v)
             {
                 v2f o;
+                float flip = (_FlipX == 1.0) ? -1.0 : 1.0;
 
-                float4 camPos = float4(UnityObjectToViewPos(vect3Zero).xyz, 1.0);    // UnityObjectToViewPos(pos) is equivalent to mul(UNITY_MATRIX_MV, float4(pos, 1.0)).xyz,
-                                                                                    // This gives us the camera's origin in 3D space (the position (0,0,0) in Camera Space)
-
-                float4 viewDir = float4(v.pos.x, v.pos.y, 0.0, 0.0);            // Since w is 0.0, in homogeneous coordinates this represents a vector direction instead of a position
-
-                float4 outPos = mul(UNITY_MATRIX_P, camPos + viewDir);            // Add the camera position and direction, then multiply by UNITY_MATRIX_P to get the new projected vert position
+                float4 offset = float4(v.pos.x * flip, v.pos.y, 0.0, 0.0);
 
                 float4 BillboardVertex = mul(UNITY_MATRIX_P,
                     mul(UNITY_MATRIX_MV, float4(0.0, 0.0, 0.0, 1.0))
-                    + float4(v.pos.x, v.pos.y, 0.0, 0.0)
+                    + offset
                     * float4(
                         length(unity_ObjectToWorld._m00_m10_m20),
                         length(unity_ObjectToWorld._m01_m11_m21), 1.0, 1.0));
@@ -66,11 +63,6 @@ Shader "Custom/BillboardingShader"
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
-
-                if (_FlipX == 1.0)
-                {
-                    uv.x = 1.0 - uv.x;
-                }
 
                 // Don't need to do anything special, just render the texture
                 return tex2D(_MainTex, uv);

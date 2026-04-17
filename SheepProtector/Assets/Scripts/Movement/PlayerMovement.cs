@@ -41,13 +41,13 @@ public class Movement : MonoBehaviour
             h = ctx.ReadValue<Vector2>().x;
             v = ctx.ReadValue<Vector2>().y;
             currentSpeed = moveSpeed;
-        }
-
-        if (ctx.canceled)
+        } else if (ctx.canceled)
         {
             h = 0.0f;
             v = 0.0f;
         }
+
+
     }
 
     public void OnSprint(InputAction.CallbackContext ctx)
