@@ -6,9 +6,11 @@ using UnityEngine.InputSystem;
 
 public class Sheepdog : Animal
 {
+    // Bark Audio
     [SerializeField] private AudioSource myAudioSource;
     [SerializeField] private AudioResource barkSound;
     [SerializeField] private SpriteRenderer barkVisual;
+
     // A list of all of the different animals that should react to bark.
     private System.Collections.Generic.List<Animal> barkReactors;
     private float barkVisTimer = 0.0f;
@@ -22,11 +24,6 @@ public class Sheepdog : Animal
         set { barkReactors = value; }
     }
 
-    // Checks if the bark button is held down.
-    private bool barkHeldDown;
-    [SerializeField] private float maxBarkCooldown = 0.5f;
-    private float barkCooldownTimer = 0.0f;
-
     // The cooldown for herding.
     [SerializeField] private float herdDist = 5.0f;
     [SerializeField] private float herdStrength = 500;
@@ -37,30 +34,12 @@ public class Sheepdog : Animal
     private void Start()
     {
         // Set up barking.
-        barkHeldDown = false;
         barkReactors = new System.Collections.Generic.List<Animal>();
     }
 
     private void Update()
     {
-        //// Check to see if the player wants to bark.
-        //bool barkCheck = Input.GetButton("Bark");
-        //barkCooldownTimer -= Time.deltaTime;
-
-        //// When the player presses down the bark button, have all bark actions go off.
-        //if (barkCheck && !barkHeldDown && barkCooldownTimer <= 0.0f)
-        //{
-        //    //Bark();
-        //    barkHeldDown = true;
-        //    barkCooldownTimer = maxBarkCooldown;
-        //}
-
-        //// If the player is no longer holding down the bark button, reset the held down checker.
-        //else if (!barkCheck && barkHeldDown)
-        //{
-        //    barkHeldDown = false;
-        //}
-
+        // Enable and disable the bark visual.
         if (barkVisTimer > 0.0f)
         {
             barkVisual.enabled = true;
@@ -77,7 +56,7 @@ public class Sheepdog : Animal
     /// </summary>
     private void FixedUpdate()
     {
-
+        // Tells Agent to not call FixedUpdate.
     }
 
     /// <summary>
@@ -132,11 +111,11 @@ public class Sheepdog : Animal
                     barkReactors[i].BarkReaction();
 
                     // If the bark reactor is the sheep, tell the sheep that
-                    // it no longer needs to check if the sheepdog is too close unless the sheep is no longer fleeing from the sheepdog.
+                    // it no longer needs to check if the sheepdog is too close
+                    // unless the sheep is no longer fleeing from the sheepdog.
                     if (barkReactors[i].gameObject.TryGetComponent<Sheep>(out Sheep sheep))
                     {
                         sheep.TooClose = false;
-                        //sheep.InRangeBarkCheck = false;
                     }
                 }
             }
@@ -150,15 +129,6 @@ public class Sheepdog : Animal
     {
 
     }
-
-    /// <summary>
-    /// How the sheepdog should react upon a collision.
-    /// </summary>
-    /// <param name="other"> The other game object in the collision. </param>
-    //private void OnCollisionEnter(Collision other)
-    //{
-    //
-    //}
 
     /// <summary>
     /// How the sheepdog should react upon an enter trigger going off.

@@ -494,7 +494,7 @@ public class Enemy : Animal
     /// <param name="other"> The other game object in the collision. </param>
     private void OnCollisionEnter(Collision other)
     {
-        // If the collision is the sheep or sheepdog, have the enemy attack it.
+        // If the collision is the sheep (or sheepdog if the enemy is a bear), have the enemy attack it.
         if ((other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep)
             || (other.gameObject.TryGetComponent<Sheepdog>(out Sheepdog otherDog) && type == EnemyType.Bear)) && stunTimer <= 0.0f)
         {
