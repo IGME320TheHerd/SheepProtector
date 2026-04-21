@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6299606102848540916}
   - component: {fileID: 5038800255223442560}
-  - component: {fileID: 2647996566518846717}
   m_Layer: 0
   m_Name: grouped_trees_03
   m_TagString: Untagged
@@ -88,18 +87,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2647996566518846717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1629881634105959417}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c11ec2be09d39e642ab4686b1f906b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isShadow: 0
-  lockY: 1
-  target: {fileID: 0}
