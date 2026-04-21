@@ -64,24 +64,26 @@ public class Movement : MonoBehaviour
         // uses WASD for movement
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
+        
+        //Get forward vector of camera
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        //Get angle between current facing direction and camera forward
         float angle = Vector3.SignedAngle(currentDir, camForward, Vector3.up);
 
-        if (angle > 5 && angle < 175)
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
         {
             sr.material.SetFloat("_FlipX", 1);
+            //hacky solution for right now, using hardcoded values to flip position of the bark sprite
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
         }
-        else if (angle < -5 && angle > -175)
+        else if (angle < -20 && angle > -160)
         {
             sr.material.SetFloat("_FlipX", 0);
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
         }
-
-        Debug.Log(sr.material.GetFloat("_FlipX"));
 
         bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
         bool isSprinting = Input.GetKey(KeyCode.LeftShift) && isMoving && currentStamina > 0; // if shift is down and you have stamina

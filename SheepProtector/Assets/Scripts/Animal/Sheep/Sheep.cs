@@ -297,13 +297,14 @@ public class Sheep : Animal
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
         float angle = Vector3.SignedAngle(velocity.normalized, camForward, Vector3.up);
 
-        if (angle > 5 && angle < 175)
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
         {
-            sr.flipX = true;
+            sr.material.SetFloat("_FlipX", 1);
         }
-        else if (angle < -5 && angle > -175)
+        else if (angle < -20 && angle > -160)
         {
-            sr.flipX = false;
+            sr.material.SetFloat("_FlipX", 0);
         }
     }
 
