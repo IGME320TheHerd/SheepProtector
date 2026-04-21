@@ -71,7 +71,6 @@ public class Sheep : Animal
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
     private float closeTimer;
     [SerializeField]private float maxCloseTimer = 5.0f;
-    private SpriteRenderer sr;
 
     /// <summary>
     /// Make tooClose public;
@@ -98,7 +97,7 @@ public class Sheep : Animal
     /// </summary>
     private void Start()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         randomWanderTimer = stillTime;
         stopWanderTimer = wanderLength;
         closeTimer = 0;
@@ -300,11 +299,11 @@ public class Sheep : Animal
         //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
         if (angle > 20 && angle < 160)
         {
-            sr.material.SetFloat("_FlipX", 1);
+            spriteRenderer.material.SetFloat("_FlipX", 1);
         }
         else if (angle < -20 && angle > -160)
         {
-            sr.material.SetFloat("_FlipX", 0);
+            spriteRenderer.material.SetFloat("_FlipX", 0);
         }
     }
 
