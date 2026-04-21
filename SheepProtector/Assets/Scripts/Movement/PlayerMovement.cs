@@ -43,13 +43,13 @@ public class Movement : MonoBehaviour
             h = ctx.ReadValue<Vector2>().x;
             v = ctx.ReadValue<Vector2>().y;
             currentSpeed = moveSpeed;
-        }
-
-        if (ctx.canceled)
+        } else if (ctx.canceled)
         {
             h = 0.0f;
             v = 0.0f;
         }
+
+
     }
 
     public void OnSprint(InputAction.CallbackContext ctx)
@@ -66,13 +66,17 @@ public class Movement : MonoBehaviour
         // uses WASD for movement
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
+        
+        //Get forward vector of camera
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        //Get angle between current facing direction and camera forward
         float angle = Vector3.SignedAngle(currentDir, camForward, Vector3.up);
 
-        if (angle > 5 && angle < 175)
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
         {
-            sr.flipX = true;
+            sr.material.SetFloat("_FlipX", 1);
+            //hacky solution for right now, using hardcoded values to flip position of the bark sprite
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
 
@@ -86,9 +90,9 @@ public class Movement : MonoBehaviour
                 rect.localPosition = pos;
             }
         }
-        else if (angle < -5 && angle > -175)
+        else if (angle < -20 && angle > -160)
         {
-            sr.flipX = false;
+            sr.material.SetFloat("_FlipX", 0);
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
 

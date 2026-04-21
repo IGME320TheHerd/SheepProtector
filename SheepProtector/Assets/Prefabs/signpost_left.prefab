@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 264931989002662061}
   - component: {fileID: 8222602142486927990}
-  - component: {fileID: 2682458047545296016}
   m_Layer: 0
   m_Name: signpost_left
   m_TagString: Untagged
@@ -56,7 +55,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5dd8844b54f63ca4ea3f6472dcb5a1a6, type: 2}
+  - {fileID: 2100000, guid: 638b127e3324cd844a60e3e4e1a4624e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -88,18 +87,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &2682458047545296016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5801912978305481539}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c11ec2be09d39e642ab4686b1f906b6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isShadow: 0
-  lockY: 1
-  target: {fileID: 0}

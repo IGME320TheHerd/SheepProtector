@@ -2,6 +2,7 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// The different types of enemies.
@@ -83,6 +84,7 @@ public class Enemy : Animal
 
         home = transform.position;
         agent = GetComponent<NavMeshAgent>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         // Set all of the specific variables that change based on what type the enemy is.
         switch (type)
@@ -448,6 +450,19 @@ public class Enemy : Animal
                     wanderTimer = maxWanderTime;
                 }
             }
+        }
+
+        Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        float angle = Vector3.SignedAngle(agent.velocity.normalized, camForward, Vector3.up);
+
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
+        {
+            spriteRenderer.material.SetFloat("_FlipX", 1);
+        }
+        else if (angle < -20 && angle > -160)
+        {
+            spriteRenderer.material.SetFloat("_FlipX", 0);
         }
     }
 
