@@ -93,7 +93,8 @@ public class Sheepdog : Animal
     /// </summary>
     public override void Die()
     {
-        
+        GameManager.Instance.GameWin = false;
+        GameManager.Instance.SetState(4);
     }
 
     /// <summary>

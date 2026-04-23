@@ -526,7 +526,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 149, y: -78}
+  m_AnchoredPosition: {x: 172, y: -102}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &413102152
@@ -549,7 +549,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Sheep\n  Protector"
+  m_text: Drover
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ba4fa689507557845807b4bd3a0656e9, type: 2}
   m_sharedMaterial: {fileID: 7021276788909302947, guid: ba4fa689507557845807b4bd3a0656e9, type: 2}
@@ -576,8 +576,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 48
-  m_fontSizeBase: 48
+  m_fontSize: 72
+  m_fontSizeBase: 72
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 48
@@ -1187,7 +1187,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5f8c43e2a12f1da47964f80d8a2da603, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d54e4e9ab63ee80468f1b981ec763a36, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1241,7 +1241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 150, y: 105}
+  m_AnchoredPosition: {x: 150, y: 106}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1043479209
@@ -1559,7 +1559,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f83e3a22009fa9a40a3a0cb168665766, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82e02dd13899a7b42ade506db8586075, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1693,14 +1693,6 @@ MonoBehaviour:
     m_ActionName: 'Player/Attack[/Mouse/leftButton,/Touchscreen/primaryTouch/tap,/Keyboard/enter]'
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 852140f2-7766-474d-8707-702459ba45f3
-    m_ActionName: 'Player/Interact[/Keyboard/e]'
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 27c5f898-bc57-4ee1-8800-db469aca5fe3
-    m_ActionName: 'Player/Crouch[/Keyboard/c]'
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: f1ba0d36-48eb-4cd5-b651-1c94a6531f70
     m_ActionName: 'Player/Jump[/Keyboard/space]'
   - m_PersistentCalls:
@@ -1771,6 +1763,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9f472596-b9cd-4205-954d-7158572262aa
     m_ActionName: 'UI/Pause[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cf1d072b-a2f0-4ef3-b5d0-5aa0090952b0
+    m_ActionName: 'Camera/CameraMoveLeft[/Keyboard/leftArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9b516bfd-6a88-463b-8941-40a2508af59c
+    m_ActionName: 'Camera/CameraMoveRight[/Keyboard/rightArrow]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: UI
@@ -2094,7 +2094,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f83e3a22009fa9a40a3a0cb168665766, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 82e02dd13899a7b42ade506db8586075, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

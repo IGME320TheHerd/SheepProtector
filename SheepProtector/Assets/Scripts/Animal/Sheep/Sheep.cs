@@ -146,7 +146,8 @@ public class Sheep : Animal
     /// </summary>
     public override void Die()
     {
-
+        GameManager.Instance.GameWin = false;
+        GameManager.Instance.SetState(4);
     }
 
     private void Update()

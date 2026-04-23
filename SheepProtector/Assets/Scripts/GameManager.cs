@@ -15,12 +15,16 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject loadScreen;
     [SerializeField]
-    private GameObject gameOverScreen;
-    [SerializeField]
     private GameObject pauseCanvas;
 
     [SerializeField]
     private GameObject eventSystemUI;
+
+    [SerializeField]
+    private string gameWinScreen;
+
+    [SerializeField]
+    private string gameLoseScreen;
 
     [SerializeField]
     private string mainMenuScene;
@@ -30,6 +34,8 @@ public class GameManager : MonoBehaviour
     private string gameScene;
 
     private GameObject currentScreen;
+
+    public bool GameWin { private get; set; }
 
     public GameState State { get; private set; }
 
@@ -102,8 +108,16 @@ public class GameManager : MonoBehaviour
                 LoadScene(mainMenuScene);
                 break;
             case GameState.GameOver:
-                //Display game over screen, do not switch scenes
-                SwitchScreenAndPause(gameOverScreen);
+                //Display game over screen
+                if (GameWin)
+                {
+                    LoadScene(gameWinScreen);
+                }
+                else
+                {
+                    LoadScene(gameLoseScreen);
+                }
+
                 break;
             case GameState.Loading:
                 //Load gameplay scene, load data from save file, do startup
