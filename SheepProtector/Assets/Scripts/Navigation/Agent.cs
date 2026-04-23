@@ -32,6 +32,11 @@ public abstract class Agent : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (acceleration.magnitude <= 0)
+        {
+            acceleration = -velocity * 2.0f;
+        }
+
         Vector3 nextPos = transform.position;
 
         velocity += acceleration * Time.fixedDeltaTime;

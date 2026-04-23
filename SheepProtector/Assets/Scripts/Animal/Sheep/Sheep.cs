@@ -47,6 +47,9 @@ public class Sheep : Animal
     // How long between rng checks for sheep attempting to wander
     [SerializeField] private float stillTime = 3.0f;
 
+    // How long after going out of range for bark should the sheep keep running?
+    [SerializeField] private float barkRangeWait;
+
     // How long sheep should wander
     [SerializeField] private float wanderLength = 15.0f;
 
@@ -58,7 +61,7 @@ public class Sheep : Animal
     private float stopWanderTimer;
 
     private bool outOfRange = false;
-    private float rangeWaitTimer = 0.0f;
+    private float rangeWaitTimer;
 
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
@@ -97,6 +100,7 @@ public class Sheep : Animal
         closeTimer = 0;
         currentState = SheepState.Still;
         tooClose = false;
+        rangeWaitTimer = barkRangeWait;
 
         // If the sheep's reference to the player game object is null, grab it.
         if (player == null)
@@ -144,12 +148,12 @@ public class Sheep : Animal
         acceleration = Vector3.zero;
         Movement();
 
-        if (rangeWaitTimer > 0.0f)
+        if (rangeWaitTimer > 0 )
         {
             rangeWaitTimer -= Time.deltaTime;
         }
 
-        // If the sheep is out of range of what it is fleeing from, have it stop fleeing after a little bit.
+        // If the sheep is out of range of what it is fleeing from, have it slow down in stop
         if (outOfRange && rangeWaitTimer <= 0.0f)
         {
             ToStillState();
@@ -157,6 +161,7 @@ public class Sheep : Animal
         }
 
         acceleration.y = 0.0f;
+        
     }
 
     /// <summary>
@@ -164,7 +169,7 @@ public class Sheep : Animal
     /// </summary>
     public void LeaveBark()
     {
-        rangeWaitTimer = 0.2f;
+        rangeWaitTimer = barkRangeWait;
         outOfRange = true;
     }
 
@@ -249,7 +254,7 @@ public class Sheep : Animal
 
                 }
                 float playerdist = Vector3.Distance(transform.position, fleeTarget.transform.position);
-                acceleration += Flee(fleeTarget) * fleeAccelerationMult / playerdist / leaveFleeDist;
+                acceleration += Flee(fleeTarget) * fleeAccelerationMult / (playerdist * 10);
                 break;
         }
 
@@ -257,26 +262,26 @@ public class Sheep : Animal
         RaycastHit hit2;
         RaycastHit hit3;
 
-        float hitdist = 5.0f;
+        float hitdist = 10f;
 
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, velocity.normalized, out hit, hitdist))
         {
-            acceleration += hit.normal * wallFleeWeight * ((1 / hit.distance) / hitdist);
+            acceleration += hit.normal * wallFleeWeight / hitdist;
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, transform.up), out hit2, hitdist))
         {
-            acceleration += hit2.normal * wallFleeWeight * ((1 / hit2.distance) / hitdist);
+            acceleration += hit.normal * wallFleeWeight / hitdist;
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
         // If the sheep is heading towards a wall, have it start moving away from it.
         if (Physics.Raycast(transform.position, Vector3.Cross(velocity.normalized, -transform.up), out hit3, hitdist))
         {
-            acceleration += hit3.normal * wallFleeWeight * ((1 / hit3.distance) / hitdist);
+            acceleration += hit.normal * wallFleeWeight / hitdist;
             stopWanderTimer -= wanderLength * 0.01f;
         }
 
@@ -324,7 +329,7 @@ public class Sheep : Animal
     /// </summary>
     private void ToStillState()
     {
-        maxSpeed = 0.0f;
+        //maxSpeed = 0.0f;
         currentState = SheepState.Still;
     }
 
