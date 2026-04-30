@@ -67,24 +67,6 @@
                     "processors": "",
                     "interactions": "Hold(duration=6)",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "CameraMoveLeft",
-                    "type": "Button",
-                    "id": "1be82c31-58d7-452e-9017-7110d34fc94f",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "Tap,Hold(duration=1)",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "CameraMoveRight",
-                    "type": "Button",
-                    "id": "b673b28b-3e41-4b26-af11-dae070157814",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "Tap,Hold(duration=0.4)",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -338,61 +320,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Sprint",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e4435b77-e845-4411-918a-45c716103c75",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "Hold(duration=1)",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "CameraMoveLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e05e4b2d-8375-4e35-988e-918b001e1663",
-                    "path": "<Gamepad>/leftShoulder",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "CameraMoveLeft",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "35fc3d84-1414-4539-a382-8d8f47cd9279",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "CameraMoveRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0b746819-bbe3-4c79-89fc-2bb7afdf240e",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "Hold(duration=1)",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "CameraMoveRight",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "69178f87-09cd-422f-a99c-4aa802009bfd",
-                    "path": "<DualShockGamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "CameraMoveRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
