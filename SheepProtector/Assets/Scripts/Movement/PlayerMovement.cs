@@ -64,8 +64,8 @@ public class Movement : MonoBehaviour
     void Update()
     {
         // uses WASD for movement
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        //float h = Input.GetAxisRaw("Horizontal");
+        //float v = Input.GetAxisRaw("Vertical");
         
         //Get forward vector of camera
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);

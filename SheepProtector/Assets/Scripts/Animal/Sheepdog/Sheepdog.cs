@@ -91,6 +91,8 @@ public class Sheepdog : Animal
     {
         if (ctx.performed)
         {
+            Debug.Log("Barked");
+
             // Play sound 
             if (myAudioSource != null && barkSound != null)
             {
