@@ -75,7 +75,7 @@ public class Movement : MonoBehaviour
         //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
         if (angle > 20 && angle < 160)
         {
-            sr.material.SetFloat("_FlipX", 1);
+            sr.flipX = true;
             //hacky solution for right now, using hardcoded values to flip position of the bark sprite
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
@@ -92,7 +92,7 @@ public class Movement : MonoBehaviour
         }
         else if (angle < -20 && angle > -160)
         {
-            sr.material.SetFloat("_FlipX", 0);
+            sr.flipX = false;
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
 
