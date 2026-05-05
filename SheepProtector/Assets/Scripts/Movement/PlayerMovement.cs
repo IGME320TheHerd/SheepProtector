@@ -14,6 +14,8 @@ public class Movement : MonoBehaviour
     [SerializeField] private float maxStamina = 100f;
     [SerializeField] private float usageRate = 15f;
     [SerializeField] private float regenRate = 10f;
+    [SerializeField] private Gradient staminaGradient;
+
     [SerializeField] private GameObject barkSprite;
 
     private Rigidbody rb; // reference for player 
@@ -41,13 +43,13 @@ public class Movement : MonoBehaviour
             h = ctx.ReadValue<Vector2>().x;
             v = ctx.ReadValue<Vector2>().y;
             currentSpeed = moveSpeed;
-        }
-
-        if (ctx.canceled)
+        } else if (ctx.canceled)
         {
             h = 0.0f;
             v = 0.0f;
         }
+
+
     }
 
     public void OnSprint(InputAction.CallbackContext ctx)
@@ -64,21 +66,45 @@ public class Movement : MonoBehaviour
         // uses WASD for movement
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-
+        
+        //Get forward vector of camera
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        //Get angle between current facing direction and camera forward
         float angle = Vector3.SignedAngle(currentDir, camForward, Vector3.up);
 
-        if (angle > 5 && angle < 175)
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
         {
             sr.flipX = true;
+            //hacky solution for right now, using hardcoded values to flip position of the bark sprite
             barkSprite.transform.localPosition = new Vector3(-8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = true;
+
+            if(staminaCircle != null)
+            {
+                RectTransform rect = staminaCircle.rectTransform;
+                rect.localScale = new Vector3(-1, 1, 1);
+
+                Vector3 pos = rect.localPosition;
+                pos.x = -Mathf.Abs(pos.x);
+                rect.localPosition = pos;
+            }
         }
-        else if (angle < -5 && angle > -175)
+        else if (angle < -20 && angle > -160)
         {
             sr.flipX = false;
             barkSprite.transform.localPosition = new Vector3(8.22f, 3.32f, 0.0f);
             barkSprite.GetComponent<SpriteRenderer>().flipX = false;
+
+            if (staminaCircle != null)
+            {
+                RectTransform rect = staminaCircle.rectTransform;
+                rect.localScale = new Vector3(1, 1, 1);
+
+                Vector3 pos = rect.localPosition;
+                pos.x = Mathf.Abs(pos.x);
+                rect.localPosition = pos;
+            }
         }
 
         bool isMoving = h != 0 || v != 0; // see if theres movement based on horzintal and vertical movement
@@ -133,7 +159,10 @@ public class Movement : MonoBehaviour
 
         if(staminaCircle != null) // if theres ui circle assigned
         {
-            staminaCircle.fillAmount = currentStamina / maxStamina; // update circle ui
+            float fillRatio = currentStamina / maxStamina;
+            staminaCircle.fillAmount = fillRatio; // update circle ui
+
+            staminaCircle.color = staminaGradient.Evaluate(fillRatio);
 
             bool isFull = currentStamina >= maxStamina; // check for stamina full
             staminaCircle.enabled = !isFull; //if full get rid of ui

@@ -18,14 +18,9 @@ public class Sheep : Animal
     // The sheep state the sheep is currently in.
     private SheepState currentState;
 
-    // The thirst meter for the sheep. THIS IS CURRENTLY UNUSED!
-    //private float thirst;
-
-    // Fields for sheep movement.
-    [SerializeField] private Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
-
-    // When fleeing, this is the target the sheep flees from (for right now, it should be the player).
+    // When fleeing, this is the target the sheep flees from.
     [SerializeField] private GameObject fleeTarget;
+
     [SerializeField] private float maxBarkTimer = 5.0f;
     private float barkTimer = 0.0f;
     bool timeLowered = false;
@@ -50,28 +45,26 @@ public class Sheep : Animal
     [SerializeField] private float fleeAccelerationMult = 200.0f;
 
     // How long between rng checks for sheep attempting to wander
-    public float stillTime = 3.0f;
+    [SerializeField] private float stillTime = 3.0f;
 
     // How long sheep should wander
-    public float wanderLength = 15.0f;
+    [SerializeField] private float wanderLength = 15.0f;
 
     // How fast sheep goes during wander
-    public float wanderSpeed = 6.0f;
+    private float wanderSpeed = 6.0f;
+
+    // How long the sheep should be wandering for.
+    private float randomWanderTimer;
+    private float stopWanderTimer;
 
     private bool outOfRange = false;
-
     private float rangeWaitTimer = 0.0f;
 
-
-    private float randomWanderTimer;
-
-    private float stopWanderTimer;
     // True if the sheep is fleeing from the sheepdog for being too close, false if not.
     private bool tooClose; // For if the sheep is not already fleeing
     private bool inRangeBarkCheck; // For if the sheep is fleeing from the dog barking and the dog ends in range of the sheep (keeps the sheep going).
     private float closeTimer;
     [SerializeField]private float maxCloseTimer = 5.0f;
-    private SpriteRenderer sr;
 
     /// <summary>
     /// Make tooClose public;
@@ -98,7 +91,7 @@ public class Sheep : Animal
     /// </summary>
     private void Start()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         randomWanderTimer = stillTime;
         stopWanderTimer = wanderLength;
         closeTimer = 0;
@@ -110,9 +103,6 @@ public class Sheep : Animal
         {
             player = FindAnyObjectByType<Sheepdog>().gameObject;
         }
-
-        // Set the thirst level of the sheep to 0. THIS IS CURRENTLY UNUSED!
-        //thirst = 0.0f;
     }
 
     /// <summary>
@@ -159,6 +149,7 @@ public class Sheep : Animal
             rangeWaitTimer -= Time.deltaTime;
         }
 
+        // If the sheep is out of range of what it is fleeing from, have it stop fleeing after a little bit.
         if (outOfRange && rangeWaitTimer <= 0.0f)
         {
             ToStillState();
@@ -219,7 +210,7 @@ public class Sheep : Animal
                 // If the sheep is fleeing for the dog barking, have it stop fleeing after a bit.
                 if (barkTimer > 0.0f)
                 {
-                    barkTimer -= Time.deltaTime;// * barkCount;
+                    barkTimer -= Time.deltaTime;
 
                     // Reset the bark counter if the player is no longer spamming the bark button. 
                     if ((barkTimer <= maxBarkTimer - 1.0f && !timeLowered) || 
@@ -297,13 +288,14 @@ public class Sheep : Animal
         Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
         float angle = Vector3.SignedAngle(velocity.normalized, camForward, Vector3.up);
 
-        if (angle > 5 && angle < 175)
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
         {
-            sr.flipX = true;
+            spriteRenderer.material.SetFloat("_FlipX", 1);
         }
-        else if (angle < -5 && angle > -175)
+        else if (angle < -20 && angle > -160)
         {
-            sr.flipX = false;
+            spriteRenderer.material.SetFloat("_FlipX", 0);
         }
     }
 
@@ -337,14 +329,6 @@ public class Sheep : Animal
     }
 
     /// <summary>
-    /// Nudge the sheep in a desired direction.
-    /// </summary>
-    private void Nudge()
-    {
-
-    }
-
-    /// <summary>
     /// How the sheep should react upon an enter trigger.
     /// </summary>
     /// <param name="other"> The other game object in the trigger. </param>
@@ -374,8 +358,9 @@ public class Sheep : Animal
     /// <param name="other"> The other game object in the trigger. </param>
     private void OnTriggerExit(Collider other)
     {
-        // If the sheepdog gets too close the sheep and the sheep is not currently fleeing,
-        // have it flee from the dog until it gets far enough away.
+        // If the sheepdog gets far enough away from the sheep and
+        // the sheep is currently fleeing due to the sheepdog being too close,
+        // have it stop fleeing from the dog after a bit (the sheep will not stop from this if it is barked at).
         if (other.TryGetComponent<Sheepdog>(out Sheepdog doggo)
             && other.GetType() != typeof(SphereCollider)
             && inRangeBarkCheck)

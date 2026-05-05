@@ -2,6 +2,7 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 /// <summary>
 /// The different types of enemies.
@@ -83,6 +84,7 @@ public class Enemy : Animal
 
         home = transform.position;
         agent = GetComponent<NavMeshAgent>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
 
         // Set all of the specific variables that change based on what type the enemy is.
         switch (type)
@@ -449,6 +451,19 @@ public class Enemy : Animal
                 }
             }
         }
+
+        Vector3 camForward = new Vector3(Camera.main.transform.forward.x, 0.0f, Camera.main.transform.forward.z);
+        float angle = Vector3.SignedAngle(agent.velocity.normalized, camForward, Vector3.up);
+
+        //Flipping logic, allows for the orientation of the sprite to be consistent even with the camera rotating
+        if (angle > 20 && angle < 160)
+        {
+            spriteRenderer.material.SetFloat("_FlipX", 1);
+        }
+        else if (angle < -20 && angle > -160)
+        {
+            spriteRenderer.material.SetFloat("_FlipX", 0);
+        }
     }
 
     /// <summary>
@@ -479,7 +494,7 @@ public class Enemy : Animal
     /// <param name="other"> The other game object in the collision. </param>
     private void OnCollisionEnter(Collision other)
     {
-        // If the collision is the sheep or sheepdog, have the enemy attack it.
+        // If the collision is the sheep (or sheepdog if the enemy is a bear), have the enemy attack it.
         if ((other.gameObject.TryGetComponent<Sheep>(out Sheep otherSheep)
             || (other.gameObject.TryGetComponent<Sheepdog>(out Sheepdog otherDog) && type == EnemyType.Bear)) && stunTimer <= 0.0f)
         {
